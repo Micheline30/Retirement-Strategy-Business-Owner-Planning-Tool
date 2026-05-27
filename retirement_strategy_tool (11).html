@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retirement Strategy Tool</title>
+<style>
+:root{--navy:#0F1F3F;--navy-light:#1F3A5F;--gold:#B8860B;--gold-light:#DAA520;--sage:#5C7A5C;--sage-light:#D8E2D5;--coral:#B85450;--cream:#FAF8F5;--cream-2:#F5F1EB;--paper:#FFFFFF;--ink:#1A1A1A;--ink-soft:#4A4A4A;--ink-muted:#6B6B6B;--rule:#D8D2C7;--rule-soft:#E8E4DC;--warn-bg:#FFF4E6;--warn-ink:#8B4513;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.55;color:var(--ink);background:var(--cream);min-height:100vh;}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",Times,serif;color:var(--navy);font-weight:600;letter-spacing:-0.01em;}
+h1{font-size:32px;line-height:1.2;}h2{font-size:22px;line-height:1.3;margin-bottom:8px;}h3{font-size:17px;line-height:1.3;}h4{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);}
+.app{min-height:100vh;display:flex;flex-direction:column;}
+.topbar{background:var(--navy);padding:14px 0;border-bottom:4px solid var(--gold);}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.brand{display:flex;align-items:baseline;gap:14px;}
+.brand-mark{font-family:Georgia,serif;font-size:22px;font-weight:600;color:var(--cream);letter-spacing:0.02em;}
+.brand-sub{font-size:12px;color:var(--gold-light);text-transform:uppercase;letter-spacing:0.12em;}
+nav.tabs{display:flex;gap:4px;}
+nav.tabs button{background:transparent;color:var(--cream);border:1px solid transparent;padding:8px 14px;border-radius:4px;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+nav.tabs button:hover{background:rgba(255,255,255,0.08);}
+nav.tabs button.active{background:var(--cream);color:var(--navy);font-weight:600;}
+main{flex:1;max-width:1180px;width:100%;margin:0 auto;padding:32px;}
+.footer{border-top:1px solid var(--rule);background:var(--cream-2);padding:18px 32px;text-align:center;font-size:12px;color:var(--ink-muted);}
+.btn{display:inline-block;background:var(--navy);color:white;border:none;padding:10px 18px;font-size:14px;border-radius:4px;cursor:pointer;font-family:inherit;font-weight:500;transition:all 0.15s;}
+.btn:hover{background:var(--navy-light);}
+.btn-gold{background:var(--gold);}.btn-gold:hover{background:var(--gold-light);}
+.btn-ghost{background:transparent;color:var(--navy);border:1px solid var(--rule);}.btn-ghost:hover{background:var(--cream-2);border-color:var(--navy);}
+.btn-danger{background:transparent;color:var(--coral);border:1px solid var(--coral);}.btn-danger:hover{background:var(--coral);color:white;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+input[type=text],input[type=date],input[type=number],input[type=email],input[type=tel],select,textarea{width:100%;padding:9px 12px;border:1px solid var(--rule);border-radius:4px;font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);transition:border-color 0.15s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(15,31,63,0.08);}
+textarea{resize:vertical;min-height:80px;line-height:1.5;}
+label{display:block;margin-bottom:5px;font-size:13px;font-weight:500;color:var(--ink-soft);}
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:28px;margin-bottom:20px;}
+.panel.tight{padding:18px;}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--gold);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.field{margin-bottom:14px;}
+.radio-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:8px;}
+.radio-row label{display:flex;align-items:center;gap:6px;font-weight:normal;cursor:pointer;min-width:110px;}
+.radio-row input{width:auto;cursor:pointer;}
+.check-card{background:var(--cream-2);border:1px solid var(--rule);border-radius:4px;padding:16px;}
+.check-row{display:flex;align-items:flex-start;gap:9px;cursor:pointer;}
+.check-row input{margin-top:3px;cursor:pointer;width:auto;}
+.help-text{font-size:12px;color:var(--ink-muted);margin-top:4px;font-style:italic;}
+.info-box{background:var(--cream-2);border-left:3px solid var(--navy);padding:12px 16px;margin:14px 0;font-size:13px;color:var(--ink-soft);}
+.info-box.warn{background:var(--warn-bg);border-left-color:var(--warn-ink);color:var(--warn-ink);}
+.hero{background:var(--paper);border:1px solid var(--rule);border-left:4px solid var(--gold);padding:32px 36px;margin-bottom:28px;}
+.hero-eye{font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);font-weight:600;margin-bottom:8px;}
+.hero p{margin-top:10px;color:var(--ink-soft);max-width:720px;}
+.hero-actions{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.stat{background:var(--paper);border:1px solid var(--rule);padding:18px 20px;border-radius:4px;}
+.stat-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-muted);font-weight:600;}
+.stat-val{font-family:Georgia,serif;font-size:28px;color:var(--navy);margin-top:4px;font-weight:600;}
+.client-list{display:flex;flex-direction:column;gap:10px;}
+.client-card{background:var(--paper);border:1px solid var(--rule);padding:18px 22px;border-radius:4px;display:grid;grid-template-columns:1fr auto auto auto;gap:18px;align-items:center;cursor:pointer;transition:all 0.15s;}
+.client-card:hover{border-color:var(--navy);background:var(--cream-2);}
+.cc-name{font-family:Georgia,serif;font-size:17px;font-weight:600;color:var(--navy);}
+.cc-meta{font-size:12px;color:var(--ink-muted);margin-top:3px;}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+.badge-draft{background:var(--warn-bg);color:var(--warn-ink);border:1px solid #E8C9A0;}
+.badge-complete{background:var(--sage-light);color:#2C4A2C;border:1px solid var(--sage);}
+.badge-solo401k{background:#E8F0E5;color:#2C4A2C;}
+.badge-sep{background:#E5EDF7;color:#1A3A6B;}
+.badge-db{background:#F7EFE0;color:#6B4A1A;}
+.badge-simple{background:#F0E8F5;color:#4A1A6B;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--ink-muted);}
+.empty-state h3{color:var(--navy);margin-bottom:8px;}
+.intake-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.save-ind{font-size:12px;color:var(--sage);font-style:italic;}
+.sec-nav{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:6px;display:flex;gap:4px;margin-bottom:22px;overflow-x:auto;}
+.sec-nav button{background:transparent;border:none;padding:8px 13px;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--ink-soft);white-space:nowrap;font-weight:500;transition:all 0.15s;}
+.sec-nav button:hover{background:var(--cream-2);}
+.sec-nav button.active{background:var(--navy);color:white;}
+.sec-nav .num{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--rule-soft);color:var(--ink-muted);font-size:11px;line-height:18px;text-align:center;margin-right:6px;font-weight:600;}
+.sec-nav button.active .num{background:var(--gold);color:white;}
+.sec-nav button.done .num{background:var(--sage);color:white;}
+.nav-btns{display:flex;justify-content:space-between;margin-top:28px;padding-top:20px;border-top:1px solid var(--rule);}
+.reco-hero{background:var(--navy);color:var(--cream);padding:36px 40px;border-radius:6px;margin-bottom:24px;position:relative;overflow:hidden;}
+.reco-hero::before{content:'';position:absolute;top:0;right:0;width:8px;height:100%;background:var(--gold);}
+.reco-eye{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-light);margin-bottom:8px;font-weight:600;}
+.reco-hero h1{color:var(--cream);font-size:32px;margin-bottom:6px;}
+.reco-sub{color:rgba(255,255,255,0.75);font-size:15px;}
+.reco-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:28px;}
+.reco-sum-item{background:rgba(255,255,255,0.06);padding:14px 16px;border-radius:4px;}
+.reco-sum-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold-light);font-weight:600;}
+.reco-sum-val{font-family:Georgia,serif;font-size:20px;color:white;margin-top:4px;font-weight:600;}
+.reason-list{padding:0;list-style:none;}
+.reason-list li{padding:10px 0 10px 28px;border-bottom:1px solid var(--rule-soft);font-size:14px;position:relative;}
+.reason-list li::before{content:'\2192';position:absolute;left:0;color:var(--gold);font-weight:700;}
+.reason-list li:last-child{border-bottom:none;}
+.plan-comps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.plan-comp{background:var(--cream-2);border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 4px 4px 0;font-size:13px;}
+.disc{background:var(--warn-bg);border:1px solid #E8C9A0;padding:18px 22px;border-radius:4px;margin:20px 0;font-size:12px;color:var(--warn-ink);}
+.disc h4{color:var(--warn-ink);margin-bottom:10px;}
+.disc p{margin-bottom:6px;line-height:1.55;}
+.disc p::before{content:'\2022 ';}
+.report-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;background:var(--cream-2);padding:16px 20px;border-radius:4px;margin-bottom:24px;}
+.rm-item .rm-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);font-weight:600;margin-bottom:2px;}
+.rm-item .rm-val{color:var(--navy);font-weight:600;font-size:13px;}
+.cstack{margin-top:12px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;}
+.csr{display:grid;grid-template-columns:1fr 120px 110px 36px;gap:12px;padding:10px 14px;align-items:center;border-bottom:1px solid var(--rule-soft);font-size:14px;}
+.csr:nth-child(even){background:var(--cream-2);}
+.csr.hdr{background:var(--navy);color:var(--paper);font-weight:600;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;}
+.csr.tot{background:var(--gold);color:var(--paper);font-weight:700;font-size:15px;}
+.csr input{padding:6px 8px;border:1px solid var(--rule);border-radius:3px;font-size:13px;background:var(--paper);text-align:right;width:100%;}
+.csr input.lbl-i{text-align:left;}
+.csr .ann{color:var(--ink-muted);text-align:right;font-size:13px;}
+.csr.tot .ann{color:var(--paper);}
+.cs-add{padding:10px 14px;background:var(--cream);border-top:1px solid var(--rule);}
+.cs-add button{background:transparent;color:var(--gold);border:1px dashed var(--gold);padding:6px 12px;border-radius:3px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;}
+.sav-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:16px;}
+.sav-card{background:var(--cream-2);border-left:4px solid var(--gold);padding:14px 16px;border-radius:4px;}
+.sav-card .sc-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);font-weight:700;margin-bottom:4px;}
+.sav-card .sc-val{font-family:Georgia,serif;font-size:22px;color:var(--navy);font-weight:700;}
+.sav-card .sc-sub{font-size:12px;color:var(--ink-muted);margin-top:4px;}
+.proj-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.proj-tbl th{text-align:left;padding:9px 12px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);background:var(--cream-2);border-bottom:2px solid var(--rule);font-weight:600;}
+.proj-tbl td{padding:10px 12px;border-bottom:1px solid var(--rule-soft);}
+.proj-tbl tr:last-child td{border-bottom:none;}
+.proj-tbl .hl{font-weight:600;color:var(--navy);}
+.sig-section{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:22px 24px;margin-bottom:16px;}
+.sig-section h3{font-size:15px;margin-bottom:4px;}
+.sig-help{font-size:12px;color:var(--ink-muted);margin-bottom:10px;}
+.sig-wrap{position:relative;background:var(--cream);border:1px solid var(--rule);border-radius:4px;overflow:hidden;}
+.sig-canvas{display:block;width:100%;height:120px;touch-action:none;cursor:crosshair;}
+.sig-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-muted);font-style:italic;font-size:13px;pointer-events:none;user-select:none;}
+.sig-ph.hidden{display:none;}
+.sig-acts{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.sig-saved{font-size:12px;color:var(--sage);font-weight:600;margin-left:auto;}
+.sig-img{background:var(--cream);border:1px solid var(--rule);border-radius:4px;padding:8px;text-align:center;}
+.sig-img img{max-height:80px;}
+.onepager{background:var(--paper);padding:40px 48px;max-width:850px;margin:0 auto;border:1px solid var(--rule);}
+.op-hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:3px solid var(--navy);margin-bottom:28px;}
+.op-logo{font-family:Georgia,serif;font-size:20px;font-weight:600;color:var(--navy);}
+.op-logo span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-top:2px;}
+.op-cost{background:var(--navy);color:white;padding:20px 24px;border-radius:4px;margin:20px 0;}
+.op-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px;}
+.op-ci .oc-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold-light);margin-bottom:4px;}
+.op-ci .oc-val{font-family:Georgia,serif;font-size:22px;color:white;font-weight:600;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;padding:12px 20px;border-radius:4px;border-left:4px solid var(--gold);font-size:13px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,0.15);animation:fadein 0.2s;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.cmp-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.cmp-tbl th{text-align:center;padding:10px 14px;background:var(--navy);color:white;font-size:12px;border-right:1px solid rgba(255,255,255,0.15);}
+.cmp-tbl th:first-child{text-align:left;}
+.cmp-tbl th.hl-col{color:var(--gold-light);}
+.cmp-tbl td{padding:10px 14px;border-bottom:1px solid var(--rule-soft);border-right:1px solid var(--rule-soft);text-align:center;}
+.cmp-tbl td:first-child{text-align:left;font-weight:600;color:var(--ink-soft);background:var(--cream-2);}
+.cmp-tbl tr:nth-child(even) td{background:var(--cream-2);}
+.cmp-tbl tr:nth-child(even) td:first-child{background:#ede9e0;}
+.cmp-tbl td.rec{background:#F0F7EE !important;}
+@media print{
+  body{background:white;}
+  .topbar,.footer,nav.tabs,.sec-nav,.nav-btns,.hero-actions,.toast,.no-print{display:none !important;}
+  main{padding:0;max-width:100%;}
+  .panel{border:none;padding:0 0 20px;page-break-inside:avoid;}
+  .reco-hero{background:white !important;color:var(--ink) !important;border:2px solid var(--navy);}
+  .reco-hero h1,.reco-eye,.reco-sub{color:var(--navy) !important;}
+  .reco-sum-item{background:var(--cream-2) !important;}
+  .reco-sum-lbl,.reco-sum-val{color:var(--navy) !important;}
+  .disc{background:white !important;border:1px solid var(--ink) !important;}
+  .sig-wrap,.sig-acts,.cs-add{display:none !important;}
+  .csr.tot{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body.op-mode>div:not(.onepager),.no-print{display:none !important;}
+  body.op-mode .onepager{border:none;padding:0;}
+  .op-cost{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  @page{margin:0.6in;size:letter;}
+}
+.dti-bar-wrap{background:var(--rule-soft);border-radius:999px;height:10px;overflow:hidden;margin:6px 0 2px;}
+.dti-bar{height:100%;border-radius:999px;transition:width 0.4s;}
+.dti-bar.green{background:var(--sage);}
+.dti-bar.yellow{background:var(--gold);}
+.dti-bar.red{background:var(--coral);}
+.dti-meter{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+.dti-card{background:var(--cream-2);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;}
+.dti-card .dc-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);font-weight:600;margin-bottom:4px;}
+.dti-card .dc-val{font-family:Georgia,serif;font-size:22px;color:var(--navy);font-weight:700;}
+.dti-card .dc-sub{font-size:12px;margin-top:4px;}
+.dti-card.warn .dc-val{color:var(--coral);}
+.dti-card.ok .dc-val{color:var(--sage);}
+.carrier-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.carrier-card{background:var(--cream-2);border:1px solid var(--rule);border-radius:4px;padding:16px;}
+.carrier-card.selected{border-color:var(--navy);background:var(--paper);box-shadow:0 0 0 2px rgba(15,31,63,0.12);}
+.carrier-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.carrier-name{font-family:Georgia,serif;font-size:15px;font-weight:600;color:var(--navy);}
+.carrier-badge{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;background:var(--navy);color:var(--cream);padding:2px 8px;border-radius:999px;}
+.prod-list{list-style:none;padding:0;margin:0;}
+.prod-list li{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px;}
+.prod-list li:last-child{border-bottom:none;}
+.prod-list input[type=checkbox]{width:auto;flex-shrink:0;margin-top:2px;accent-color:var(--navy);}
+.selected-products{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;margin-top:16px;}
+.sp-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);margin-bottom:10px;}
+.sp-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:13px;}
+.sp-item:last-child{border-bottom:none;}
+.sp-carrier{font-size:11px;color:var(--gold);font-weight:600;text-transform:uppercase;}
+/* suppress number input spinners in budget worksheet */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+@media(max-width:700px){
+  .stats,.reco-sum{grid-template-columns:1fr 1fr;}
+  .grid2,.plan-comps,.sav-grid{grid-template-columns:1fr;}
+  main{padding:16px;}
+  .topbar-inner{padding:0 16px;flex-direction:column;gap:10px;}
+  .client-card{grid-template-columns:1fr auto;}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar"><div class="topbar-inner">
+    <div class="brand"><span class="brand-mark">Retirement Strategy</span><span class="brand-sub">Business Owner Planning Tool</span></div>
+    <nav class="tabs">
+      <button id="nav-dashboard" onclick="goTo('dashboard')">Dashboard</button>
+      <button id="nav-comparison" onclick="goTo('comparison')">Plan Comparison</button>
+      <button id="nav-help" onclick="goTo('help')">Help</button>
+    </nav>
+  </div></div>
+  <main id="main"></main>
+  <div class="footer">
+    Prepared by&nbsp;<span class="bi" contenteditable="true" data-key="agentName">[Your Name]</span>&nbsp;&middot;&nbsp;
+    <span class="bi" contenteditable="true" data-key="agencyName">[Firm Name]</span>&nbsp;&middot;&nbsp;
+    <span class="bi" contenteditable="true" data-key="agentPhone">[Phone]</span>&nbsp;&middot;&nbsp;
+    <span class="bi" contenteditable="true" data-key="agentEmail">[Email]</span>
+    &nbsp;&middot;&nbsp;For illustration only. Not tax or legal advice.
+  </div>
+</div>
+<script>
+
+// ── PLAN DATA ────────────────────────────────────────────────
+var PLANS = {
+  solo401k:{
+    name:'Solo 401(k)', tag:'Best for sole owners, no employees',
+    desc:'Contribute as both employee and employer for the highest possible annual deferral. Roth option and plan loans available.',
+    fits:['Sole proprietor, single-member LLC, or S-Corp','No full-time W-2 employees (except spouse)','Wants maximum contribution and flexibility','Interested in Roth contributions or plan loans'],
+    comps:['Employee deferral up to $23,500 (2025)','Employer profit-sharing up to 25% of net SE income','Total cap $70,000 / $77,500 age 50-59 / $81,250 age 60-63','Roth Solo 401(k) option available','Loans up to 50% of balance or $50,000','Form 5500-EZ required when assets exceed $250,000']
+  },
+  sep:{
+    name:'SEP-IRA', tag:'Simplest high-limit plan',
+    desc:'Zero paperwork, fund up to the tax filing deadline. No fixed annual commitment. Best when simplicity matters as much as contribution size.',
+    fits:['Any business structure or entity type','Zero administrative burden preferred','Wants to contribute close to tax deadline','Has employees (same percentage required for all eligible employees)'],
+    comps:['Up to 25% of net SE income or W-2 wages','Hard cap of $69,000 (2025)','No annual IRS filing required','Fund as late as October 15 with extension','Must contribute same percentage for all eligible employees']
+  },
+  simple:{
+    name:'SIMPLE IRA', tag:'For small teams up to 100 employees',
+    desc:'Straightforward plan for businesses with employees. No discrimination testing. Mandatory employer matching builds employee goodwill.',
+    fits:['100 or fewer employees','Want employee participation in retirement savings','Prefer low administrative cost','Lower income where limits are less critical'],
+    comps:['Employee deferrals up to $16,500 (2025)','Employer must match 2-3% of compensation','No annual actuarial fees or discrimination testing','Two-year vesting on employer contributions','Cannot combine with another employer plan in same year']
+  },
+  db:{
+    name:'Defined Benefit / Cash Balance', tag:'Maximum shelter for high earners age 50+',
+    desc:'Actuarially determined annual contributions can shelter $100,000 to $340,000+ per year. Best for high-income owners age 50+ with stable income.',
+    fits:['Net income above $200,000','Age 50 or older with stable income','Willing to commit to annual contributions','Wants to aggressively accelerate pre-retirement savings'],
+    comps:['Contributions determined by enrolled actuary annually','Can shelter up to $340,000/yr depending on age and income','Often paired with Solo 401(k) for maximum combined deferral','Annual actuarial certification (~$2,000-$5,000)','IRS Form 5500 required annually','Contributions are mandatory once plan is established']
+  }
+};
+
+// ── CARRIERS & PRODUCTS ──────────────────────────────────────
+var CARRIERS = {
+  aflac: {
+    name: 'Aflac', badge: 'Supplemental',
+    desc: 'America&#39;s #1 supplemental insurer. Pays cash benefits directly to policyholders.',
+    products: [
+      {id:'aflac_accident',    name:'Accident Insurance',          cat:'Supplemental', desc:'Cash benefits for accidental injuries, ER visits, and follow-up care.'},
+      {id:'aflac_cancer',      name:'Cancer / Critical Illness',   cat:'Supplemental', desc:'Lump-sum or ongoing cash benefits upon cancer or critical illness diagnosis.'},
+      {id:'aflac_std',         name:'Short-Term Disability',       cat:'Income Protection', desc:'Replaces a portion of income during a qualifying disability (typically 60-70%).'},
+      {id:'aflac_hospital',    name:'Hospital Indemnity',          cat:'Supplemental', desc:'Daily cash benefit for each day of a covered hospital stay.'},
+      {id:'aflac_dental',      name:'Dental & Vision',             cat:'Benefits', desc:'Standalone dental and/or vision coverage for individuals and families.'},
+      {id:'aflac_life',        name:'Life Insurance',              cat:'Life', desc:'Term and whole life options available through Aflac.'}
+    ]
+  },
+  amicable: {
+    name: 'American Amicable', badge: 'Life',
+    desc: 'Specializes in life insurance solutions for families and final expense planning.',
+    products: [
+      {id:'amic_term',         name:'Term Life Insurance',         cat:'Life', desc:'Level premium term coverage 10-30 years. Simple, affordable death benefit protection.'},
+      {id:'amic_whole',        name:'Whole Life Insurance',        cat:'Life', desc:'Permanent coverage with guaranteed cash value accumulation. Premiums never increase.'},
+      {id:'amic_final',        name:'Final Expense / Burial',      cat:'Life', desc:'Simplified issue whole life to cover funeral costs and end-of-life expenses ($5K-$25K).'},
+      {id:'amic_child',        name:'Children&#39;s Whole Life',      cat:'Life', desc:'Lock in insurability and low rates for children. Cash value grows tax-deferred.'}
+    ]
+  },
+  moo: {
+    name: 'Mutual of Omaha', badge: 'Full Portfolio',
+    desc: 'One of the most trusted names in insurance. Wide product portfolio for individuals and businesses.',
+    products: [
+      {id:'moo_term',          name:'Term Life Insurance',         cat:'Life', desc:'Competitive term rates. Convertible to permanent coverage without new underwriting.'},
+      {id:'moo_whole',         name:'Whole / Universal Life',      cat:'Life', desc:'Flexible permanent life with guaranteed or adjustable premiums and death benefit.'},
+      {id:'moo_medsup',        name:'Medicare Supplement',         cat:'Health', desc:'Plans A, F, G, N to cover Medicare gaps. Strong rate stability and AM Best A+ rating.'},
+      {id:'moo_ltc',           name:'Long-Term Care Insurance',    cat:'Health', desc:'Covers home care, assisted living, and nursing home costs. Protects retirement assets.'},
+      {id:'moo_annuity',       name:'Fixed / Deferred Annuity',    cat:'Retirement', desc:'Guaranteed interest rates with tax-deferred growth. No market risk. Multiple payout options.'},
+      {id:'moo_disability',    name:'Disability Income Insurance', cat:'Income Protection', desc:'Individual disability coverage up to 60-70% of income. Own-occupation definition available.'}
+    ]
+  },
+  transamerica: {
+    name: 'Transamerica', badge: 'Retirement + Life',
+    desc: 'Leading provider of retirement plans, life insurance, and annuities for individuals and businesses.',
+    products: [
+      {id:'trans_term',        name:'Term Life Insurance',         cat:'Life', desc:'TransACE and Trendsetter series. Competitive rates with strong conversion options.'},
+      {id:'trans_ul',          name:'Universal Life / IUL',        cat:'Life', desc:'Indexed Universal Life ties cash value growth to market index with downside protection.'},
+      {id:'trans_whole',       name:'Whole Life Insurance',        cat:'Life', desc:'Guaranteed permanent protection with cash value accumulation and dividend potential.'},
+      {id:'trans_fixed_ann',   name:'Fixed Annuity',               cat:'Retirement', desc:'Guaranteed rate of return for a set period. Tax-deferred growth with no market exposure.'},
+      {id:'trans_fia',         name:'Fixed Indexed Annuity',       cat:'Retirement', desc:'Participation in market index gains (S&P 500, etc.) with 0% floor — no loss years.'},
+      {id:'trans_ira',         name:'Traditional IRA',             cat:'Retirement', desc:'Deductible contributions up to $7,000/yr ($8,000 age 50+). Tax-deferred growth.'},
+      {id:'trans_roth',        name:'Roth IRA',                    cat:'Retirement', desc:'After-tax contributions; tax-free growth and withdrawals. Income limits apply.'},
+      {id:'trans_sep',         name:'SEP-IRA',                     cat:'Retirement', desc:'Up to 25% of compensation or $69,000 (2025). Simplest high-limit self-employed plan.'},
+      {id:'trans_403b',        name:'403(b) Plan',                 cat:'Retirement', desc:'For nonprofit, school, and healthcare employees. Same limits as 401(k). Transamerica is a leading 403(b) provider.'},
+      {id:'trans_ltc',         name:'Long-Term Care Insurance',    cat:'Health', desc:'TransCare series. Inflation protection and shared care riders available.'}
+    ]
+  },
+  americo: {
+    name: 'Americo', badge: 'Life + Annuity',
+    desc: 'Flexible life and annuity products with a focus on final expense, annuities, and Medicare supplement.',
+    products: [
+      {id:'amer_term',         name:'Term Life Insurance',         cat:'Life', desc:'Level term with return-of-premium option available. Ages 18-65.'},
+      {id:'amer_whole',        name:'Whole Life / Final Expense',  cat:'Life', desc:'Simplified issue final expense whole life $2K-$30K. No exam required.'},
+      {id:'amer_fia',          name:'Fixed Indexed Annuity',       cat:'Retirement', desc:'Eagle series FIA. Index-linked growth with principal protection and income riders.'},
+      {id:'amer_fixed',        name:'Fixed Annuity (MYGA)',        cat:'Retirement', desc:'Multi-year guaranteed annuity. Locked rate for 3-10 years. Competitive yields.'},
+      {id:'amer_medsup',       name:'Medicare Supplement',         cat:'Health', desc:'Plans F, G, N. Competitive rates for Medicare beneficiaries.'},
+      {id:'amer_cancer',       name:'Cancer / Critical Illness',   cat:'Supplemental', desc:'Lump-sum benefit on diagnosis. Standalone or as supplemental rider.'}
+    ]
+  }
+};
+
+// Product category colors
+var CAT_COLORS = {
+  'Retirement':        {bg:'#E5EDF7', color:'#1A3A6B'},
+  'Life':              {bg:'#E8F0E5', color:'#2C4A2C'},
+  'Health':            {bg:'#F0E8F5', color:'#4A1A6B'},
+  'Supplemental':      {bg:'#FFF4E6', color:'#8B4513'},
+  'Income Protection': {bg:'#F7EFE0', color:'#6B4A1A'},
+  'Benefits':          {bg:'#E5F7F4', color:'#1A6B5A'}
+};
+
+// ── STATE ────────────────────────────────────────────────────────
+var S = {
+  view: 'dashboard',
+  clients: [],
+  cid: null,
+  sec: 'personal',
+  branding: {agentName:'', agencyName:'', agentPhone:'', agentEmail:''}
+};
+var SK = 'ret_v5';
+
+// ── STORAGE ──────────────────────────────────────────────────
+function loadData() {
+  try {
+    var d = JSON.parse(localStorage.getItem(SK) || '{}');
+    S.clients = d.clients || [];
+    var br = d.branding || {};
+    S.branding.agentName  = br.agentName  || '';
+    S.branding.agencyName = br.agencyName || '';
+    S.branding.agentPhone = br.agentPhone || '';
+    S.branding.agentEmail = br.agentEmail || '';
+    S.clients.forEach(function(c) {
+      if (!Array.isArray(c.costStack)) c.costStack = [];
+      if (!Array.isArray(c.selectedProducts)) c.selectedProducts = [];
+      var budgetFields = ['monthlyGrossIncome','incSpouseIncome','incOvertime','incRental','incSocSec','incOther',
+        'dedFedTax','dedStateTax','dedFICA','ded401k','dedHealthIns','dedLifeIns','dedOtherPayroll',
+        'monthlyHousing','fix2ndMortgage','monthlyCarPayment','fixCar2','fixCarIns','fixHomeIns',
+        'fixUtilities','fixCellPhone','fixInternet','fixGroceries','monthlyCreditCard','fixPersonalLoan',
+        'monthlyStudentLoan','fixChildSupport','fixMedical','monthlyChildcare','fixOther',
+        'varDining','varEntertainment','varStreaming','varClothing','varPersonalCare','varGym',
+        'varTravel','varHobbies','varGifts','varPets','monthlyOtherDebt',
+        'savEmergency','savLifeIns','savIUL','savAnnuity','savMortProtect','savHealthInd','savOtherSav',
+        'mpHomeValue','mpMortgageBalance','mp2ndMortgage','mpMonthlyPayment','mpRate',
+        'mpLoanTerm','mpYearsRemaining','mpClientAge','mpCoborrowIncome'];
+      budgetFields.forEach(function(f){ if (!c[f]) c[f] = ''; });
+      if (!c.signatureClient)  c.signatureClient  = '';
+      if (!c.signatureAdvisor) c.signatureAdvisor = '';
+      if (!c.signedAt)         c.signedAt = '';
+      if (!c.overridePlan)     c.overridePlan = '';
+    });
+  } catch(e) {}
+}
+
+function saveData() {
+  try { localStorage.setItem(SK, JSON.stringify({clients:S.clients, branding:S.branding})); } catch(e) {}
+}
+
+function exportData() {
+  var blob = new Blob([JSON.stringify({clients:S.clients, branding:S.branding, exportedAt:new Date().toISOString()}, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'retirement_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup downloaded');
+}
+
+function importData() {
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.json';
+  inp.onchange = function(e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function(ev) {
+      try {
+        var d = JSON.parse(ev.target.result);
+        if (d.clients && Array.isArray(d.clients)) {
+          if (confirm('Import ' + d.clients.length + ' records? Duplicates will be overwritten.')) {
+            d.clients.forEach(function(c) {
+              var i = S.clients.findIndex(function(x){ return x.id === c.id; });
+              if (i >= 0) S.clients[i] = c; else S.clients.push(c);
+            });
+            if (d.branding) Object.assign(S.branding, d.branding);
+            saveData(); render(); toast('Imported ' + d.clients.length + ' records');
+          }
+        } else { alert('Invalid backup file.'); }
+      } catch(e) { alert('Could not read file: ' + e.message); }
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+}
+
+// ── CLIENT OPS ───────────────────────────────────────────────
+function blankClient() {
+  return {
+    id: 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), status: 'draft',
+    clientName:'', clientDob:'', clientEmail:'', clientPhone:'', clientAddress:'', ageRange:'under40',
+    bizName:'', bizStructure:'', bizIndustry:'', bizEin:'', bizYears:'', numEmployees:'0', fiscalYear:'December 31',
+    netIncome:'', otherIncome:'', filingStatus:'Single', taxBracket:'24',
+    currentSavings:'', retireAge:'65', existingAccounts:'',
+    primaryGoal:'max-deduction', riskTolerance:'Moderate',
+    hsaInterest:false, hasHdhp:'no', qbiInterest:false, augustaInterest:false, annuityInterest:false,
+    advisorNotes:'', overridePlan:'', strategyNotes:'',
+    costStack:[], signatureClient:'', signatureAdvisor:'', signedAt:'',
+    // SECTION 1 - Gross Income
+    incSpouseIncome:'', incOvertime:'', incRental:'', incSocSec:'', incOther:'',
+    // SECTION 2 - Deductions
+    dedFedTax:'', dedStateTax:'', dedFICA:'', ded401k:'', dedHealthIns:'', dedLifeIns:'', dedOtherPayroll:'',
+    // SECTION 3 - Fixed Liabilities
+    monthlyGrossIncome:'', monthlyHousing:'', fix2ndMortgage:'', monthlyCarPayment:'', fixCar2:'',
+    fixCarIns:'', fixHomeIns:'', fixUtilities:'', fixCellPhone:'', fixInternet:'', fixGroceries:'',
+    monthlyCreditCard:'', fixPersonalLoan:'', monthlyStudentLoan:'', fixChildSupport:'', fixMedical:'',
+    monthlyChildcare:'', fixOther:'',
+    // SECTION 4 - Variable
+    varDining:'', varEntertainment:'', varStreaming:'', varClothing:'', varPersonalCare:'',
+    varGym:'', varTravel:'', varHobbies:'', varGifts:'', varPets:'', monthlyOtherDebt:'',
+    // SECTION 5 - Protection & Savings
+    savEmergency:'', savLifeIns:'', savIUL:'', savAnnuity:'', savMortProtect:'', savHealthInd:'', savOtherSav:'',
+    // Mortgage Protection
+    mpHomeValue:'', mpMortgageBalance:'', mp2ndMortgage:'', mpMonthlyPayment:'', mpRate:'',
+    mpLoanTerm:'', mpYearsRemaining:'', mpClientAge:'', mpCoborrowIncome:'',
+    // selected products
+    selectedProducts:[]
+  };
+}
+
+function newClient() {
+  var c = blankClient();
+  S.clients.push(c); S.cid = c.id; S.view = 'intake'; S.sec = 'personal';
+  saveData(); render();
+}
+
+function gc() {
+  return S.clients.find(function(c){ return c.id === S.cid; }) || null;
+}
+
+function setF(field, val) {
+  var c = gc(); if (!c) return;
+  // Strip currency formatting so parseFloat works correctly
+  if (typeof val === 'string') val = val.replace(/[$,]/g, '');
+  c[field] = val; c.updatedAt = new Date().toISOString(); saveData();
+  var el = document.getElementById('save-ind');
+  if (el) el.textContent = 'Saved ' + new Date().toLocaleTimeString();
+}
+
+function delClient(id) {
+  if (!confirm('Delete this client record? This cannot be undone.')) return;
+  S.clients = S.clients.filter(function(c){ return c.id !== id; });
+  saveData(); goTo('dashboard');
+}
+
+function openClient(id) { S.cid = id; S.view = 'intake'; S.sec = 'personal'; render(); }
+
+function markComplete() {
+  var c = gc(); if (!c) return;
+  c.status = 'complete'; saveData(); toast('Marked complete'); render();
+}
+
+// ── RECOMMENDATION ENGINE ────────────────────────────────────
+function calcRec(c) {
+  var income  = parseFloat(c.netIncome) || 0;
+  var bracket = parseFloat(c.taxBracket) / 100 || 0.24;
+  var age     = c.ageRange;
+  var isOld   = age === '50-59' || age === '60plus';
+  var isHigh  = income >= 200000;
+  var noEmp   = c.numEmployees === '0';
+  var fewEmp  = c.numEmployees === '0' || c.numEmployees === '1-5';
+  var catchup = age === '50-59' ? 7500 : (age === '60plus' ? 11250 : 0);
+  var seInc   = income * 0.9235;
+  var planId, contrib = 0, reasoning = [];
+
+  if (noEmp && isHigh && isOld) {
+    planId = 'db';
+    contrib = Math.min(income * (age === '60plus' ? 0.75 : 0.60), 340000, seInc);
+    reasoning.push('High income (' + fmt(income) + '/yr) at age ' + (age === '50-59' ? '50-59' : '60+') + ' makes a Defined Benefit / Cash Balance plan the most powerful option — can shelter ' + fmt(Math.round(contrib)) + '/yr in pre-tax contributions.');
+    reasoning.push('Consider pairing with a Solo 401(k) for additional employee deferral on top of the defined benefit contribution, maximizing total annual tax shelter.');
+  } else if (noEmp && c.bizStructure !== 'C-Corp') {
+    planId = 'solo401k';
+    var emp = Math.min(23500 + catchup, seInc);
+    var er  = Math.min(seInc * 0.25, 46500);
+    contrib = Math.min(emp + er, 70000 + catchup, seInc);
+    reasoning.push('As a solo owner with no employees, the Solo 401(k) provides the highest contribution: employee deferral (' + fmt(Math.min(23500 + catchup, seInc)) + ') plus employer profit-sharing (' + fmt(Math.round(Math.min(seInc * 0.25, 46500))) + ') for a total of ' + fmt(Math.round(contrib)) + '/yr.');
+    if (c.primaryGoal === 'simplicity') reasoning.push('Since simplicity is your goal, note that a SEP-IRA requires zero administration at the cost of roughly ' + fmt(Math.min(23500 + catchup, income)) + ' less in annual deferral.');
+    if (c.primaryGoal === 'roth') reasoning.push('The Solo 401(k) uniquely offers a Roth contribution option — ideal for building tax-free retirement income.');
+    if (c.primaryGoal === 'flexibility') reasoning.push('Solo 401(k) plan loans allow access to up to 50% of the vested balance or $50,000, whichever is less, without taxes or early-withdrawal penalties.');
+  } else if (!noEmp && fewEmp) {
+    planId = 'simple';
+    contrib = Math.min(16500 + (isOld ? 3500 : 0), seInc);
+    reasoning.push('With ' + c.numEmployees + ' employees, the SIMPLE IRA is the most practical qualified plan — no discrimination testing, no actuary, and straightforward administration.');
+    reasoning.push('The required employer match (2-3%) is predictable in cost and cannot be combined with any other employer retirement plan in the same calendar year.');
+  } else {
+    planId = 'sep';
+    contrib = Math.min(seInc * 0.25, 69000);
+    reasoning.push('A SEP-IRA offers the lowest administrative burden of any high-limit plan. Contribute up to 25% of net SE income (' + fmt(Math.round(contrib)) + '/yr) with no annual IRS filing and no fixed commitment requirement.');
+    if (isHigh && isOld) reasoning.push('At your income and age, layering a Defined Benefit plan on top of the SEP could significantly increase annual tax shelter. Discuss the combined approach with your CPA.');
+  }
+
+  if (c.hsaInterest && c.hasHdhp === 'yes') reasoning.push('HSA confirmed viable — contribute $4,300 (self) or $8,550 (family) for a triple tax advantage: deductible in, grows tax-free, and tax-free out for qualified medical expenses.');
+  else if (c.hsaInterest) reasoning.push('HSA interest noted. Must be enrolled in an HDHP to contribute. 2025 minimum deductible: $1,650 (self) / $3,300 (family).');
+  if (c.qbiInterest) reasoning.push('QBI Deduction (Sec 199A): as a pass-through entity you may deduct up to 20% of qualified business income — potentially saving ' + fmt(Math.round(income * 0.20 * bracket)) + ' at your bracket. Retirement contributions reduce QBI; confirm net effect with your CPA.');
+  if (c.augustaInterest) reasoning.push('Augusta Rule (Sec 280A): rent your personal home to your business for up to 14 days/yr at fair market value. You collect tax-free; business deducts the expense. Requires a written agreement and documented business purpose.');
+  if (c.annuityInterest) reasoning.push('Annuity interest noted. Tax-deferred annuities have no IRS contribution cap and work well as supplemental deferral after all qualified plans are maxed. Watch for fees (typically 1-2%/yr) and ordinary income treatment on withdrawals.');
+
+  if (c.overridePlan && PLANS[c.overridePlan]) {
+    planId = c.overridePlan;
+    reasoning.unshift('(Advisor override applied — see strategy notes for rationale.)');
+  }
+
+  var taxSavings = Math.round(contrib * bracket);
+  var pct = income > 0 ? Math.round((contrib / income) * 100) : 0;
+
+  // Practical contribution: what the client can actually afford after taxes and living expenses
+  var stdDed = (c.filingStatus === 'Married Filing Jointly') ? 30000 : 15000;
+  var seTax = seInc * 0.153;
+  var taxableInc = Math.max(0, income - stdDed - seTax / 2);
+  var estIncomeTax = taxableInc * bracket * 0.65;
+  var estTotalTax = Math.round(seTax + estIncomeTax);
+  var afterTax = income - estTotalTax;
+  var livingFloor = Math.min(24000, income * 0.70);
+  var practicalContrib = Math.max(0, Math.round(afterTax - livingFloor));
+  var recContrib = Math.min(Math.round(contrib), practicalContrib);
+  var recSavings = Math.round(recContrib * bracket);
+  var lowIncomeWarning = income > 0 && income < 50000;
+
+  // Add affordability note to reasoning when income is low
+  if (lowIncomeWarning && recContrib < contrib) {
+    reasoning.push('AFFORDABILITY NOTE: The IRS maximum contribution is ' + fmt(Math.round(contrib)) + '/yr, but after estimated taxes (~' + fmt(estTotalTax) + ') and minimum living expenses (~' + fmt(Math.round(livingFloor)) + '), the practical recommended contribution is approximately ' + fmt(recContrib) + '/yr. Contributing more could leave insufficient funds for basic living expenses. Discuss cash flow carefully with your CPA.');
+  }
+
+  return {planId:planId, plan:PLANS[planId], contrib:Math.round(contrib), taxSavings:taxSavings, pct:pct, reasoning:reasoning, bracket:bracket, income:income,
+          practicalContrib:practicalContrib, recContrib:recContrib, recSavings:recSavings,
+          estTotalTax:estTotalTax, afterTax:Math.round(afterTax), livingFloor:Math.round(livingFloor),
+          lowIncomeWarning:lowIncomeWarning};
+}
+
+// ── COST STACK ───────────────────────────────────────────────
+function defaultStack(planId, netIncome) {
+  var inc = parseFloat(netIncome) || 150000;
+  var se  = inc * 0.9235;
+  if (planId === 'solo401k') return [
+    {id:'s1', label:'Employee elective deferral',    monthly: Math.round(Math.min(23500, se) / 12)},
+    {id:'s2', label:'Employer profit-sharing',       monthly: Math.round(Math.min(se * 0.25, 46500) / 12)},
+    {id:'s3', label:'Account fees (Fidelity/Schwab)',monthly: 0},
+    {id:'s4', label:'HSA contribution (if applicable)', monthly: 358}
+  ];
+  if (planId === 'sep') return [
+    {id:'s1', label:'SEP-IRA annual contribution',   monthly: Math.round(Math.min(se * 0.25, 69000) / 12)},
+    {id:'s2', label:'Account fees',                  monthly: 0},
+    {id:'s3', label:'HSA contribution (if applicable)', monthly: 358}
+  ];
+  if (planId === 'simple') return [
+    {id:'s1', label:'Your employee deferral',        monthly: Math.round(Math.min(16500, inc) / 12)},
+    {id:'s2', label:'Employer match (3%)',           monthly: Math.round(inc * 0.03 / 12)},
+    {id:'s3', label:'Third-party admin fees',        monthly: 25},
+    {id:'s4', label:'HSA contribution (if applicable)', monthly: 358}
+  ];
+  if (planId === 'db') {
+    var co = Math.round(Math.min(inc * 0.6, 340000));
+    return [
+      {id:'s1', label:'Annual DB contribution',      monthly: Math.round(co / 12)},
+      {id:'s2', label:'Actuary / TPA fees',          monthly: 333},
+      {id:'s3', label:'Investment management (~0.5%)', monthly: Math.round(co * 0.005 / 12)},
+      {id:'s4', label:'Solo 401(k) deferral (paired)', monthly: Math.round(23500 / 12)}
+    ];
+  }
+  return [];
+}
+
+function initStack() {
+  var c = gc(); if (!c) return;
+  if (!c.costStack || c.costStack.length === 0) {
+    var r = calcRec(c);
+    c.costStack = defaultStack(r.planId, c.netIncome);
+    saveData();
+  }
+}
+
+function stackTotal() {
+  var c = gc();
+  return (c && c.costStack || []).reduce(function(s, r){ return s + (parseFloat(r.monthly) || 0); }, 0);
+}
+
+// ── HELPERS ──────────────────────────────────────────────────
+function toast(msg) {
+  var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 2400);
+}
+
+function esc(s) {
+  return s == null ? '' : String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function fmt(n)   { return '$' + Math.round(n).toLocaleString(); }
+function fmtMo(n) { return '$' + Math.round(n).toLocaleString() + '/mo'; }
+
+function goTo(view) { S.view = view; render(); window.scrollTo(0,0); }
+
+function selOpt(cur, opts) {
+  return opts.map(function(o) {
+    var v  = Array.isArray(o) ? o[0] : o;
+    var lb = Array.isArray(o) ? o[1] : o;
+    return '<option value="' + esc(v) + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + esc(lb) + '</option>';
+  }).join('');
+}
+
+function bindBranding() {
+  document.querySelectorAll('.bi').forEach(function(el) {
+    var k = el.dataset.key;
+    if (S.branding[k]) el.textContent = S.branding[k];
+    el.addEventListener('blur', function() { S.branding[k] = el.textContent.trim(); saveData(); });
+  });
+}
+
+// ── DASHBOARD ────────────────────────────────────────────────
+function renderDashboard() {
+  var total    = S.clients.length;
+  var drafts   = S.clients.filter(function(c){ return c.status === 'draft'; }).length;
+  var complete = S.clients.filter(function(c){ return c.status === 'complete'; }).length;
+  var totalSav = S.clients.filter(function(c){ return c.status === 'complete'; }).reduce(function(s,c){
+    try { return s + calcRec(c).recSavings; } catch(e) { return s; }
+  }, 0);
+
+  var rows = '';
+  if (!total) {
+    rows = '<div class="empty-state"><h3>No clients yet</h3><p>Click "+ New client intake" to get started.</p></div>';
+  } else {
+    var list = S.clients.slice().reverse();
+    list.forEach(function(c) {
+      var badge = '';
+      try { var r = calcRec(c); badge = '<span class="badge badge-' + r.planId + '">' + r.plan.name + '</span>'; } catch(e) {}
+      rows += '<div class="client-card" onclick="openClient(\'' + c.id + '\')">'
+        + '<div><div class="cc-name">' + (esc(c.clientName) || 'Unnamed client') + '</div>'
+        + '<div class="cc-meta">' + (esc(c.bizStructure) || 'No structure set')
+        + (c.bizName ? ' &middot; ' + esc(c.bizName) : '')
+        + (c.netIncome ? ' &middot; ' + fmt(c.netIncome) + '/yr net' : '')
+        + ' &middot; Added ' + new Date(c.createdAt).toLocaleDateString() + '</div></div>'
+        + badge
+        + '<span class="badge badge-' + (c.status === 'complete' ? 'complete' : 'draft') + '">' + c.status + '</span>'
+        + '<button class="btn btn-ghost btn-sm no-print" onclick="event.stopPropagation();delClient(\'' + c.id + '\')">Delete</button>'
+        + '</div>';
+    });
+  }
+
+  document.getElementById('main').innerHTML = ''
+    + '<div class="hero"><div class="hero-eye">Business owner planning tool</div>'
+    + '<h1>Retirement strategy intake</h1>'
+    + '<p>Complete the intake form for each business owner, generate a personalized retirement plan recommendation, build an annual cost projection, and produce a printable client report with digital signatures. All data saves locally in your browser.</p>'
+    + '<div class="hero-actions">'
+    + '<button class="btn btn-gold" onclick="newClient()">+ New client intake</button>'
+    + '<button class="btn btn-ghost" onclick="exportData()">&#8595; Export backup</button>'
+    + '<button class="btn btn-ghost" onclick="importData()">&#8593; Import backup</button>'
+    + '</div></div>'
+    + '<div class="stats">'
+    + '<div class="stat"><div class="stat-lbl">Total clients</div><div class="stat-val">' + total + '</div></div>'
+    + '<div class="stat"><div class="stat-lbl">In progress</div><div class="stat-val">' + drafts + '</div></div>'
+    + '<div class="stat"><div class="stat-lbl">Completed</div><div class="stat-val">' + complete + '</div></div>'
+    + '<div class="stat"><div class="stat-lbl">Est. total tax savings</div><div class="stat-val">' + (totalSav > 0 ? fmt(totalSav) : '&mdash;') + '</div></div>'
+    + '</div>'
+    + '<div class="panel tight"><div class="section-head"><h2>Client records</h2></div>'
+    + '<div class="client-list">' + rows + '</div></div>';
+}
+
+// ── INTAKE SHELL ─────────────────────────────────────────────
+var SECS = ['personal','business','household','income','goals','products','advisor'];
+var SEC_LBL = {personal:'Client info', business:'Business', household:'Household & Debt', income:'Income & taxes', goals:'Goals & add-ons', products:'Insurance & Products', advisor:'Advisor notes'};
+
+function renderIntake() {
+  var c = gc(); if (!c) { goTo('dashboard'); return; }
+  var idx = SECS.indexOf(S.sec);
+
+  // Build nav buttons using data-sec attributes — NO nested quotes in onclick
+  var navHtml = '';
+  SECS.forEach(function(s, i) {
+    var done = i < idx, act = s === S.sec;
+    navHtml += '<button data-sec="' + s + '" class="' + (act ? 'active' : (done ? 'done' : '')) + '">'
+      + '<span class="num">' + (done ? '&#10003;' : (i+1)) + '</span>'
+      + SEC_LBL[s] + '</button>';
+  });
+
+  document.getElementById('main').innerHTML = ''
+    + '<div class="intake-hdr no-print">'
+    + '<div><button class="btn btn-ghost btn-sm" onclick="goTo(\'dashboard\')" style="margin-bottom:8px">&#8592; All clients</button>'
+    + '<h1>' + (esc(c.clientName) || 'New client') + '</h1></div>'
+    + '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">'
+    + '<span class="save-ind" id="save-ind">All changes saved</span>'
+    + '<button class="btn btn-ghost btn-sm" onclick="markComplete()">Mark complete</button>'
+    + '<button class="btn btn-gold btn-sm" onclick="goToRec()">Generate recommendation &#8594;</button>'
+    + '</div></div>'
+    + '<div class="sec-nav no-print" id="sec-nav">' + navHtml + '</div>'
+    + '<div id="sec-body"></div>';
+
+  // Attach nav click handlers after DOM is ready
+  document.querySelectorAll('#sec-nav button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      S.sec = this.dataset.sec;
+      renderSection();
+    });
+  });
+
+  renderSection();
+}
+
+// ── SECTION RENDERER ─────────────────────────────────────────
+function renderSection() {
+  var c = gc(); if (!c) return;
+  var idx = SECS.indexOf(S.sec);
+  var html = '';
+
+  // Update nav highlight
+  document.querySelectorAll('#sec-nav button').forEach(function(btn, i) {
+    btn.className = i === idx ? 'active' : (i < idx ? 'done' : '');
+  });
+
+  if (S.sec === 'personal') {
+    html = '<div class="panel"><div class="section-head"><h2>Personal information</h2>'
+      + '<span style="font-size:12px;color:var(--ink-muted)">Fields marked * drive the recommendation</span></div>'
+      + '<div class="grid2">'
+      + '<div class="field"><label>Full name *</label>'
+      + '<input type="text" id="f_clientName" value="' + esc(c.clientName) + '" placeholder="Mark Johnson"></div>'
+      + '<div class="field"><label>Date of birth</label>'
+      + '<input type="date" id="f_clientDob" value="' + esc(c.clientDob) + '"></div>'
+      + '<div class="field"><label>Email</label>'
+      + '<input type="email" id="f_clientEmail" value="' + esc(c.clientEmail) + '" placeholder="mark@business.com"></div>'
+      + '<div class="field"><label>Phone</label>'
+      + '<input type="tel" id="f_clientPhone" value="' + esc(c.clientPhone) + '" placeholder="(843) 555-0100"></div>'
+      + '<div class="field" style="grid-column:1/-1"><label>Address</label>'
+      + '<input type="text" id="f_clientAddress" value="' + esc(c.clientAddress) + '" placeholder="123 Main St, Mullins, SC 29574"></div>'
+      + '</div>'
+      + '<div class="field"><label>Age range *</label><div class="radio-row">';
+    [['under40','Under 40'],['40-49','40 to 49'],['50-59','50 to 59'],['60plus','60 and older']].forEach(function(pair) {
+      html += '<label><input type="radio" name="ageRange" value="' + pair[0] + '"' + (c.ageRange === pair[0] ? ' checked' : '') + '> ' + pair[1] + '</label>';
+    });
+    html += '</div></div></div>';
+  }
+
+  else if (S.sec === 'business') {
+    html = '<div class="panel"><div class="section-head"><h2>Business information</h2></div>'
+      + '<div class="grid2">'
+      + '<div class="field"><label>Business name</label>'
+      + '<input type="text" id="f_bizName" value="' + esc(c.bizName) + '" placeholder="ABC Consulting LLC"></div>'
+      + '<div class="field"><label>Business structure *</label>'
+      + '<select id="f_bizStructure"><option value="">Select...</option>'
+      + selOpt(c.bizStructure, [['Sole Proprietor / Single-Member LLC','Sole Proprietor / Single-Member LLC'],['S-Corp','S-Corp'],['C-Corp','C-Corp'],['Partnership / Multi-Member LLC','Partnership / Multi-Member LLC']])
+      + '</select></div>'
+      + '<div class="field"><label>Industry</label>'
+      + '<input type="text" id="f_bizIndustry" value="' + esc(c.bizIndustry) + '" placeholder="Consulting, Real Estate, Healthcare..."></div>'
+      + '<div class="field"><label>EIN</label>'
+      + '<input type="text" id="f_bizEin" value="' + esc(c.bizEin) + '" placeholder="XX-XXXXXXX"></div>'
+      + '<div class="field"><label>Years in business</label>'
+      + '<input type="number" id="f_bizYears" value="' + esc(c.bizYears) + '" placeholder="5" min="0"></div>'
+      + '<div class="field"><label>Employees (excluding owner) *</label>'
+      + '<select id="f_numEmployees">'
+      + selOpt(c.numEmployees, [['0','0 — just me'],['1-5','1 to 5'],['6-25','6 to 25'],['26-100','26 to 100'],['100+','More than 100']])
+      + '</select></div>'
+      + '<div class="field"><label>Fiscal year end</label>'
+      + '<select id="f_fiscalYear">'
+      + selOpt(c.fiscalYear, ['December 31','March 31','June 30','September 30'])
+      + '</select></div>'
+      + '</div>'
+      + '<div class="info-box">Business structure and employee count are the two most critical factors in determining which retirement plan is available and how much can be contributed.</div>'
+      + '</div>';
+  }
+
+  else if (S.sec === 'household') {
+    // ── Live calculations ──────────────────────────────────
+    var g = parseFloat(c.monthlyGrossIncome)||0;
+    var grossAnn = g * 12;
+
+    // S1 total
+    var s1 = g + (parseFloat(c.incSpouseIncome)||0) + (parseFloat(c.incOvertime)||0) +
+             (parseFloat(c.incRental)||0) + (parseFloat(c.incSocSec)||0) + (parseFloat(c.incOther)||0);
+
+    // S2 deductions
+    var s2 = (parseFloat(c.dedFedTax)||0) + (parseFloat(c.dedStateTax)||0) + (parseFloat(c.dedFICA)||0) +
+             (parseFloat(c.ded401k)||0) + (parseFloat(c.dedHealthIns)||0) + (parseFloat(c.dedLifeIns)||0) +
+             (parseFloat(c.dedOtherPayroll)||0);
+    var netTakeHome = s1 - s2;
+
+    // S3 fixed
+    var s3 = (parseFloat(c.monthlyHousing)||0) + (parseFloat(c.fix2ndMortgage)||0) +
+             (parseFloat(c.monthlyCarPayment)||0) + (parseFloat(c.fixCar2)||0) +
+             (parseFloat(c.fixCarIns)||0) + (parseFloat(c.fixHomeIns)||0) +
+             (parseFloat(c.fixUtilities)||0) + (parseFloat(c.fixCellPhone)||0) +
+             (parseFloat(c.fixInternet)||0) + (parseFloat(c.fixGroceries)||0) +
+             (parseFloat(c.monthlyCreditCard)||0) + (parseFloat(c.fixPersonalLoan)||0) +
+             (parseFloat(c.monthlyStudentLoan)||0) + (parseFloat(c.fixChildSupport)||0) +
+             (parseFloat(c.fixMedical)||0) + (parseFloat(c.monthlyChildcare)||0) +
+             (parseFloat(c.fixOther)||0);
+
+    // S4 variable
+    var s4 = (parseFloat(c.varDining)||0) + (parseFloat(c.varEntertainment)||0) +
+             (parseFloat(c.varStreaming)||0) + (parseFloat(c.varClothing)||0) +
+             (parseFloat(c.varPersonalCare)||0) + (parseFloat(c.varGym)||0) +
+             (parseFloat(c.varTravel)||0) + (parseFloat(c.varHobbies)||0) +
+             (parseFloat(c.varGifts)||0) + (parseFloat(c.varPets)||0) +
+             (parseFloat(c.monthlyOtherDebt)||0);
+
+    // S5 protection
+    var s5 = (parseFloat(c.savEmergency)||0) + (parseFloat(c.savLifeIns)||0) +
+             (parseFloat(c.savIUL)||0) + (parseFloat(c.savAnnuity)||0) +
+             (parseFloat(c.savMortProtect)||0) + (parseFloat(c.savHealthInd)||0) +
+             (parseFloat(c.savOtherSav)||0);
+
+    var surplus = s1 - s2 - s3 - s4 - s5;
+
+    // DTI
+    var allDebt = (parseFloat(c.monthlyHousing)||0) + (parseFloat(c.monthlyCarPayment)||0) +
+                  (parseFloat(c.monthlyCreditCard)||0) + (parseFloat(c.monthlyStudentLoan)||0) +
+                  (parseFloat(c.fixPersonalLoan)||0) + (parseFloat(c.fixChildSupport)||0);
+    var frontDTI = s1 > 0 ? Math.round(((parseFloat(c.monthlyHousing)||0) / s1) * 100) : 0;
+    var backDTI  = s1 > 0 ? Math.round((allDebt / s1) * 100) : 0;
+    var frontColor = frontDTI === 0 ? 'var(--ink-muted)' : frontDTI <= 28 ? 'var(--sage)' : frontDTI <= 36 ? 'var(--gold)' : 'var(--coral)';
+    var backColor  = backDTI  === 0 ? 'var(--ink-muted)' : backDTI  <= 36 ? 'var(--sage)' : backDTI  <= 43 ? 'var(--gold)' : 'var(--coral)';
+    var frontLabel = frontDTI === 0 ? '—' : frontDTI <= 28 ? 'Excellent' : frontDTI <= 36 ? 'Good' : frontDTI <= 43 ? 'Caution' : 'High Risk';
+    var backLabel  = backDTI  === 0 ? '—' : backDTI  <= 28 ? 'Excellent' : backDTI  <= 36 ? 'Good'  : backDTI  <= 43 ? 'Caution' : 'High Risk';
+
+    // Section 7 suggested allocations
+    var avail    = Math.max(0, surplus);
+    var sugIUL   = Math.round(avail * 0.40);
+    var sugMP    = Math.round(avail * 0.25);
+    var sugAnn   = Math.round(avail * 0.20);
+    var sugEmerg = Math.round(avail * 0.15);
+
+    function pct(val) { return s1 > 0 ? (val/s1*100).toFixed(1)+'%' : '—'; }
+    function fmtN(n)  { return n > 0 ? '$'+Math.round(n).toLocaleString() : '—'; }
+    function statusBadge(actual, target, higher_is_worse) {
+      if (s1 === 0) return '<span style="color:var(--ink-muted)">—</span>';
+      var r = actual / s1;
+      var ok = higher_is_worse ? r <= target : r >= target;
+      var color = ok ? 'var(--sage)' : 'var(--coral)';
+      return '<span style="color:'+color+';font-weight:700;">' + (ok ? '✓ On Target' : '⚠ Needs Attention') + '</span>';
+    }
+
+    function row(label, id, placeholder, notes, optional) {
+      var val = c[id] || '';
+      var ann = parseFloat(val) > 0 ? '$'+(Math.round(parseFloat(val)*12)).toLocaleString() : '';
+      var p = s1 > 0 && parseFloat(val) > 0 ? (parseFloat(val)/s1*100).toFixed(1)+'%' : '';
+      return '<tr>'
+        + '<td style="padding:7px 10px;font-size:13px;">' + label + (optional ? ' <span style="font-size:11px;color:var(--ink-muted)">(opt)</span>' : '') + '</td>'
+        + '<td style="padding:4px 8px;"><input type="text" inputmode="numeric" id="f_'+id+'" value="'+esc(val)+'" placeholder="'+placeholder+'" style="padding:7px 10px;font-size:14px;text-align:right;width:140px;border:1px solid #C4B9A8;border-radius:4px;background:#EBF3FB;"></td>'
+        + '<td style="padding:7px 10px;font-size:12px;color:var(--ink-muted);text-align:right;">'+ann+'</td>'
+        + '<td style="padding:7px 10px;font-size:12px;color:var(--ink-muted);text-align:right;">'+p+'</td>'
+        + '<td style="padding:7px 10px;font-size:12px;color:var(--ink-muted);">'+notes+'</td>'
+        + '</tr>';
+    }
+
+    function totRow(label, val) {
+      return '<tr style="background:var(--navy);color:white;">'
+        + '<td style="padding:8px 10px;font-weight:700;font-size:13px;">'+label+'</td>'
+        + '<td style="padding:8px 10px;font-weight:700;text-align:right;">$'+Math.round(val).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;font-size:12px;">$'+Math.round(val*12).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;font-size:12px;">'+pct(val)+'</td>'
+        + '<td></td></tr>';
+    }
+
+    function thead() {
+      return '<tr style="background:var(--cream-2);">'
+        + '<th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Category</th>'
+        + '<th style="padding:8px 10px;text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Monthly</th>'
+        + '<th style="padding:8px 10px;text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Annual</th>'
+        + '<th style="padding:8px 10px;text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">% Gross</th>'
+        + '<th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Notes</th>'
+        + '</tr>';
+    }
+
+    html = '<div class="panel">'
+      + '<div class="section-head"><h2>Household Budget &amp; Debt Worksheet</h2>'
+      + '<span style="font-size:12px;color:var(--ink-muted)">Evertrust-style 7-section budget analysis</span></div>'
+      + '<p style="font-size:13px;color:var(--ink-soft);margin-bottom:18px;">Blue fields = client inputs. All totals, percentages, and DTI ratios calculate automatically. Complete all sections before generating the recommendation.</p>'
+
+      // ── SECTION 1 ──
+      + '<div style="margin-bottom:22px;">'
+      + '<div style="background:var(--navy);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 1 — Gross Monthly Income</div>'
+      + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+      + thead()
+      + '<tbody>'
+      + row('Primary Employment — Gross Monthly Pay','monthlyGrossIncome','5,000','Gross pay BEFORE taxes','')
+      + row('Spouse / Partner Income','incSpouseIncome','0','Gross monthly if applicable',true)
+      + row('Overtime / Bonus (monthly avg)','incOvertime','0','',true)
+      + row('Rental / Investment Income','incRental','0','',true)
+      + row('Social Security / Pension','incSocSec','0','',true)
+      + row('Other Income','incOther','0','',true)
+      + totRow('TOTAL GROSS MONTHLY INCOME', s1)
+      + '</tbody></table></div>'
+
+      // ── SECTION 2 ──
+      + '<div style="margin-bottom:22px;">'
+      + '<div style="background:var(--navy-light);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 2 — Taxes &amp; Payroll Deductions</div>'
+      + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+      + thead()
+      + '<tbody>'
+      + row('Federal Income Tax','dedFedTax','0','From pay stub','')
+      + row('State Income Tax','dedStateTax','0','Varies by state','')
+      + row('Social Security &amp; Medicare (FICA)','dedFICA','0','~7.65% of gross','')
+      + row('Current 401(k) / Retirement Contribution','ded401k','0','','')
+      + row('Health / Dental / Vision Insurance','dedHealthIns','0','','')
+      + row('Life Insurance (employer plan)','dedLifeIns','0','',true)
+      + row('Other Payroll Deductions','dedOtherPayroll','0','FSA, garnishment, etc.',true)
+      + totRow('TOTAL DEDUCTIONS', s2)
+      + '<tr style="background:var(--gold);color:white;">'
+      + '<td style="padding:8px 10px;font-weight:700;font-size:13px;">NET TAKE-HOME PAY (Monthly)</td>'
+      + '<td style="padding:8px 10px;font-weight:700;text-align:right;">$'+Math.round(netTakeHome).toLocaleString()+'</td>'
+      + '<td style="padding:8px 10px;text-align:right;font-size:12px;">$'+Math.round(netTakeHome*12).toLocaleString()+'</td>'
+      + '<td style="padding:8px 10px;text-align:right;font-size:12px;">'+pct(netTakeHome)+'</td>'
+      + '<td></td></tr>'
+      + '</tbody></table></div>'
+
+      // ── SECTION 3 ──
+      + '<div style="margin-bottom:22px;">'
+      + '<div style="background:var(--coral);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 3 — Fixed Monthly Liabilities &nbsp;<span style="font-weight:400;font-size:11px;">(Target: ≤ 50% of gross)</span></div>'
+      + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+      + thead()
+      + '<tbody>'
+      + row('Mortgage / Rent Payment','monthlyHousing','1,200','Principal + interest + escrow','')
+      + row('2nd Mortgage / HELOC','fix2ndMortgage','0','',true)
+      + row('Car Payment #1','monthlyCarPayment','400','','')
+      + row('Car Payment #2','fixCar2','0','',true)
+      + row('Car Insurance (all vehicles)','fixCarIns','150','','')
+      + row('Homeowner / Renter Insurance','fixHomeIns','100','','')
+      + row('Utilities (electric, gas, water, trash)','fixUtilities','200','','')
+      + row('Cell Phone','fixCellPhone','100','','')
+      + row('Internet / Cable / Satellite','fixInternet','80','','')
+      + row('Groceries / Household Food','fixGroceries','500','','')
+      + row('Credit Card Minimum Payments','monthlyCreditCard','0','Sum of ALL card minimums','')
+      + row('Personal Loan Payments','fixPersonalLoan','0','',true)
+      + row('Student Loan Payments','monthlyStudentLoan','0','',true)
+      + row('Child Support / Alimony','fixChildSupport','0','',true)
+      + row('Medical / Prescription (regular)','fixMedical','0','',true)
+      + row('Childcare / School Tuition','monthlyChildcare','0','',true)
+      + row('Other Fixed Obligations','fixOther','0','',true)
+      + totRow('TOTAL FIXED LIABILITIES', s3)
+      + '</tbody></table></div>'
+
+      // ── SECTION 4 ──
+      + '<div style="margin-bottom:22px;">'
+      + '<div style="background:var(--sage);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 4 — Variable / Lifestyle Expenses &nbsp;<span style="font-weight:400;font-size:11px;">(Target: ≤ 30% of gross)</span></div>'
+      + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+      + thead()
+      + '<tbody>'
+      + row('Dining Out / Restaurants','varDining','200','','')
+      + row('Entertainment / Events','varEntertainment','100','','')
+      + row('Streaming Services / Subscriptions','varStreaming','50','','')
+      + row('Clothing / Shoes / Shopping','varClothing','100','','')
+      + row('Personal Care / Salon / Grooming','varPersonalCare','80','','')
+      + row('Gym / Fitness Memberships','varGym','0','',true)
+      + row('Travel / Vacations (monthly avg)','varTravel','0','',true)
+      + row('Hobbies / Recreation / Sports','varHobbies','0','',true)
+      + row('Gifts / Charity / Church','varGifts','0','',true)
+      + row('Pet Expenses','varPets','0','',true)
+      + row('Miscellaneous / Unplanned','monthlyOtherDebt','100','','')
+      + totRow('TOTAL VARIABLE EXPENSES', s4)
+      + '</tbody></table></div>'
+
+      // ── SECTION 5 ──
+      + '<div style="margin-bottom:22px;">'
+      + '<div style="background:var(--gold);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 5 — Financial Protection &amp; Savings &nbsp;<span style="font-weight:400;font-size:11px;">(Target: 20% of gross)</span></div>'
+      + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+      + thead()
+      + '<tbody>'
+      + row('Emergency Fund Contribution','savEmergency','0','Target: 3-6 months of expenses','')
+      + row('Life Insurance Premium (current)','savLifeIns','0','',true)
+      + row('IUL Premium','savIUL','0','',true)
+      + row('Annuity Savings','savAnnuity','0','',true)
+      + row('Mortgage Protection Premium','savMortProtect','0','',true)
+      + row('Health Indemnity / Supplemental','savHealthInd','0','',true)
+      + row('Additional Savings / Investments','savOtherSav','0','',true)
+      + totRow('TOTAL PROTECTION & SAVINGS', s5)
+      + '<tr style="background:'+(surplus>=0?'var(--sage)':'var(--coral)')+';color:white;">'
+      + '<td style="padding:9px 10px;font-weight:700;font-size:14px;">MONTHLY SURPLUS / (DEFICIT)</td>'
+      + '<td style="padding:9px 10px;font-weight:700;text-align:right;font-size:14px;">$'+Math.round(Math.abs(surplus)).toLocaleString()+(surplus<0?' (deficit)':'')+' </td>'
+      + '<td style="padding:9px 10px;text-align:right;font-size:12px;">$'+Math.round(Math.abs(surplus)*12).toLocaleString()+(surplus<0?' (deficit)':'')+' </td>'
+      + '<td></td><td></td></tr>'
+      + '</tbody></table></div>'
+
+      // ── SECTION 6 SCORECARD ──
+      + (s1 > 0 ? (
+        '<div style="margin-bottom:22px;">'
+        + '<div style="background:var(--ink);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 6 — Budget Scorecard &amp; Product Opportunity Analysis</div>'
+        + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+        + '<tr style="background:var(--cream-2);"><th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Category</th>'
+        + '<th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);text-align:right;">Monthly</th>'
+        + '<th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);text-align:right;">% Gross</th>'
+        + '<th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Target</th>'
+        + '<th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Status</th>'
+        + '<th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-muted);border-bottom:2px solid var(--gold);">Product Opportunity</th>'
+        + '</tr>'
+        + '<tr><td style="padding:8px 10px;font-size:13px;">Fixed Liabilities</td>'
+        + '<td style="padding:8px 10px;text-align:right;">$'+Math.round(s3).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;">'+pct(s3)+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">≤ 50%</td>'
+        + '<td style="padding:8px 10px;">'+statusBadge(s3, 0.50, true)+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">'+(s3/s1>0.50?'⚠ Debt consolidation conversation':'')+'</td></tr>'
+        + '<tr style="background:var(--cream-2);"><td style="padding:8px 10px;font-size:13px;">Variable Expenses</td>'
+        + '<td style="padding:8px 10px;text-align:right;">$'+Math.round(s4).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;">'+pct(s4)+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">≤ 30%</td>'
+        + '<td style="padding:8px 10px;">'+statusBadge(s4, 0.30, true)+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">'+(s4/s1>0.30?'⚠ Lifestyle budget coaching':'')+'</td></tr>'
+        + '<tr><td style="padding:8px 10px;font-size:13px;">Protection &amp; Savings</td>'
+        + '<td style="padding:8px 10px;text-align:right;">$'+Math.round(s5).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;">'+pct(s5)+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">≥ 20%</td>'
+        + '<td style="padding:8px 10px;">'+statusBadge(s5, 0.20, false)+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">'+(s5/s1<0.20?'★ Recommend IUL / Annuity / MP':'')+'</td></tr>'
+
+        // DTI rows
+        + '<tr style="background:var(--cream-2);"><td style="padding:8px 10px;font-size:13px;">Front-End DTI (Housing)</td>'
+        + '<td style="padding:8px 10px;text-align:right;">$'+Math.round(parseFloat(c.monthlyHousing)||0).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;font-weight:700;color:'+frontColor+';">'+frontDTI+'%</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">≤ 28%</td>'
+        + '<td style="padding:8px 10px;font-weight:700;color:'+frontColor+';">'+frontLabel+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">'+(frontDTI>28?'⚠ Consider mortgage protection':'')+'</td></tr>'
+        + '<tr><td style="padding:8px 10px;font-size:13px;">Back-End DTI (All Debt)</td>'
+        + '<td style="padding:8px 10px;text-align:right;">$'+Math.round(allDebt).toLocaleString()+'</td>'
+        + '<td style="padding:8px 10px;text-align:right;font-weight:700;color:'+backColor+';">'+backDTI+'%</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">≤ 43%</td>'
+        + '<td style="padding:8px 10px;font-weight:700;color:'+backColor+';">'+backLabel+'</td>'
+        + '<td style="padding:8px 10px;font-size:12px;color:var(--ink-muted);">'+(backDTI>43?'⚠ High risk — debt reduction priority':'')+'</td></tr>'
+        + '</table></div>'
+      ) : '<div class="info-box">Enter income in Section 1 to activate the budget scorecard and DTI analysis.</div>')
+
+      // ── SECTION 7 ──
+      + (s1 > 0 && surplus > 0 ? (
+        '<div style="margin-bottom:22px;">'
+        + '<div style="background:var(--gold);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Section 7 — Recommended Monthly Premium Capacity</div>'
+        + '<table style="width:100%;border-collapse:collapse;border:1px solid var(--rule);">'
+        + '<tr><td style="padding:9px 14px;font-size:13px;font-weight:700;">Available Monthly Budget for New Premiums</td>'
+        + '<td style="padding:9px 14px;font-size:16px;font-weight:700;color:var(--navy);text-align:right;">$'+Math.round(avail).toLocaleString()+'</td>'
+        + '<td style="padding:9px 14px;font-size:12px;color:var(--ink-muted);">Monthly surplus after all current expenses</td></tr>'
+        + '<tr style="background:var(--cream-2);"><td style="padding:8px 14px;font-size:13px;">★ Suggested IUL Allocation (40%)</td>'
+        + '<td style="padding:8px 14px;font-weight:700;color:var(--navy);text-align:right;">$'+sugIUL.toLocaleString()+'</td>'
+        + '<td style="padding:8px 14px;font-size:12px;color:var(--ink-muted);">40% of surplus toward IUL premium</td></tr>'
+        + '<tr><td style="padding:8px 14px;font-size:13px;">★ Suggested Mortgage Protection (25%)</td>'
+        + '<td style="padding:8px 14px;font-weight:700;color:var(--navy);text-align:right;">$'+sugMP.toLocaleString()+'</td>'
+        + '<td style="padding:8px 14px;font-size:12px;color:var(--ink-muted);">25% of surplus for mortgage protection</td></tr>'
+        + '<tr style="background:var(--cream-2);"><td style="padding:8px 14px;font-size:13px;">★ Suggested Annuity Savings (20%)</td>'
+        + '<td style="padding:8px 14px;font-weight:700;color:var(--navy);text-align:right;">$'+sugAnn.toLocaleString()+'</td>'
+        + '<td style="padding:8px 14px;font-size:12px;color:var(--ink-muted);">20% of surplus toward annuity goal</td></tr>'
+        + '<tr><td style="padding:8px 14px;font-size:13px;">Remaining Reserve / Emergency Fund (15%)</td>'
+        + '<td style="padding:8px 14px;font-weight:700;color:var(--navy);text-align:right;">$'+sugEmerg.toLocaleString()+'</td>'
+        + '<td style="padding:8px 14px;font-size:12px;color:var(--ink-muted);">15% kept as emergency buffer</td></tr>'
+        + '</table></div>'
+      ) : (s1 > 0 ? '<div class="info-box warn"><strong>No surplus available.</strong> Client expenses exceed income. Focus on budget coaching and debt reduction before recommending new premiums.</div>' : ''))
+
+      // ── MORTGAGE PROTECTION ──
+      + '<div style="margin-top:28px;margin-bottom:22px;">'
+      + '<div style="background:var(--navy);color:white;padding:8px 14px;border-radius:4px 4px 0 0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Mortgage Protection Analysis</div>'
+      + '<div style="border:1px solid var(--rule);padding:16px;border-top:none;border-radius:0 0 4px 4px;">'
+      + '<div class="grid2">'
+      + '<div class="field"><label>Current Home / Property Value ($)</label><input type="text" inputmode="numeric" id="f_mpHomeValue" value="'+esc(c.mpHomeValue)+'" placeholder="300000" style="padding:7px 10px;font-size:14px;text-align:right;width:100%;border:1px solid #C4B9A8;border-radius:4px;background:#EBF3FB;"></div>'
+      + '<div class="field"><label>Current Mortgage Balance ($)</label><input type="text" inputmode="numeric" id="f_mpMortgageBalance" value="'+esc(c.mpMortgageBalance)+'" placeholder="250000" style="padding:7px 10px;font-size:14px;text-align:right;width:100%;border:1px solid #C4B9A8;border-radius:4px;background:#EBF3FB;"></div>'
+      + '<div class="field"><label>2nd Mortgage / HELOC Balance ($)</label><input type="text" inputmode="numeric" id="f_mp2ndMortgage" value="'+esc(c.mp2ndMortgage)+'" placeholder="0" style="padding:7px 10px;font-size:14px;text-align:right;width:100%;border:1px solid #C4B9A8;border-radius:4px;background:#EBF3FB;"></div>'
+      + '<div class="field"><label>Monthly Mortgage Payment (P+I+Escrow)</label><input type="text" inputmode="numeric" id="f_mpMonthlyPayment" value="'+esc(c.mpMonthlyPayment)+'" placeholder="1200" style="padding:7px 10px;font-size:14px;text-align:right;width:100%;border:1px solid #C4B9A8;border-radius:4px;background:#EBF3FB;"></div>'
+      + '<div class="field"><label>Client Age</label><input type="number" id="f_mpClientAge" value="'+esc(c.mpClientAge)+'" placeholder="40" min="18" max="85"></div>'
+      + '<div class="field"><label>Co-Borrower Gross Monthly Income ($)</label><input type="text" inputmode="numeric" id="f_mpCoborrowIncome" value="'+esc(c.mpCoborrowIncome)+'" placeholder="0" style="padding:7px 10px;font-size:14px;text-align:right;width:100%;border:1px solid #C4B9A8;border-radius:4px;background:#EBF3FB;"></div>'
+      + '</div>'
+      + (function(){
+          var homeVal  = parseFloat(c.mpHomeValue)||0;
+          var mortBal  = parseFloat(c.mpMortgageBalance)||0;
+          var mort2    = parseFloat(c.mp2ndMortgage)||0;
+          var totalMort = mortBal + mort2;
+          var equity    = homeVal - totalMort;
+          var ltv       = homeVal > 0 ? (totalMort/homeVal*100).toFixed(1) : 0;
+          var equityPct = homeVal > 0 ? (equity/homeVal*100).toFixed(1) : 0;
+          var coInc     = parseFloat(c.mpCoborrowIncome)||0;
+          var totalInc  = s1 + coInc;
+          var mortDTI   = totalInc > 0 ? ((parseFloat(c.mpMonthlyPayment)||0)/totalInc*100).toFixed(1) : 0;
+          var annInc    = totalInc * 12;
+          var minCoverage   = totalMort;
+          var stdCoverage   = totalMort + (annInc * 2);
+          var recCoverage   = Math.max(0, totalMort - equity) + (annInc * 5);
+          var compCoverage  = totalMort + (annInc * 10);
+          if (homeVal === 0 && mortBal === 0) return '<div class="info-box" style="margin-top:14px;">Enter property and mortgage information above to see coverage analysis.</div>';
+          return '<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">'
+            + '<div style="background:var(--cream-2);border:1px solid var(--rule);padding:14px;border-radius:4px;">'
+            + '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);font-weight:600;margin-bottom:10px;">Property &amp; Equity</div>'
+            + '<div style="font-size:13px;line-height:2;">'
+            + '<div>Total mortgage debt: <strong>$'+Math.round(totalMort).toLocaleString()+'</strong></div>'
+            + '<div>Home equity: <strong style="color:'+(equityPct>20?'var(--sage)':'var(--coral)')+';">$'+Math.round(equity).toLocaleString()+' ('+equityPct+'%)</strong></div>'
+            + '<div>Loan-to-Value: <strong>'+ltv+'%</strong></div>'
+            + '</div></div>'
+            + '<div style="background:var(--cream-2);border:1px solid var(--rule);padding:14px;border-radius:4px;">'
+            + '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);font-weight:600;margin-bottom:10px;">Recommended Coverage Tiers</div>'
+            + '<div style="font-size:12px;line-height:2;">'
+            + '<div>Minimum (pay off mortgage): <strong>$'+Math.round(minCoverage).toLocaleString()+'</strong></div>'
+            + '<div>Standard (+ 2 yrs income): <strong>$'+Math.round(stdCoverage).toLocaleString()+'</strong></div>'
+            + '<div style="color:var(--gold);font-weight:700;">Recommended (+ 5 yrs): $'+Math.round(recCoverage).toLocaleString()+'</div>'
+            + '<div>Comprehensive (+ 10 yrs): <strong>$'+Math.round(compCoverage).toLocaleString()+'</strong></div>'
+            + '</div></div>'
+            + '</div>';
+        })()
+      + '</div></div>'
+
+      + '</div>';
+  }
+  else if (S.sec === 'income') {
+    html = '<div class="panel"><div class="section-head"><h2>Income &amp; tax profile</h2></div>'
+      + '<div class="grid2">'
+      + '<div class="field"><label>Net business income per year ($) *</label>'
+      + '<input type="number" id="f_netIncome" value="' + esc(c.netIncome) + '" placeholder="150000" min="0"></div>'
+      + '<div class="field"><label>Other household income per year ($)</label>'
+      + '<input type="number" id="f_otherIncome" value="' + esc(c.otherIncome) + '" placeholder="0" min="0"></div>'
+      + '<div class="field"><label>Tax filing status</label>'
+      + '<select id="f_filingStatus">'
+      + selOpt(c.filingStatus, ['Single','Married Filing Jointly','Married Filing Separately','Head of Household'])
+      + '</select></div>'
+      + '<div class="field"><label>Current marginal tax bracket *</label>'
+      + '<select id="f_taxBracket">'
+      + selOpt(c.taxBracket, [['10','10%'],['12','12%'],['22','22%'],['24','24%'],['32','32%'],['35','35%'],['37','37%']])
+      + '</select></div>'
+      + '<div class="field"><label>Current retirement savings balance ($)</label>'
+      + '<input type="number" id="f_currentSavings" value="' + esc(c.currentSavings) + '" placeholder="50000" min="0"></div>'
+      + '<div class="field"><label>Target retirement age</label>'
+      + '<input type="number" id="f_retireAge" value="' + esc(c.retireAge) + '" placeholder="65" min="50" max="80"></div>'
+      + '<div class="field" style="grid-column:1/-1"><label>Existing retirement accounts</label>'
+      + '<input type="text" id="f_existingAccounts" value="' + esc(c.existingAccounts) + '" placeholder="e.g. Traditional IRA at Fidelity, old 401(k) from prior employer"></div>'
+      + '</div>'
+      + '<div class="info-box">Net SE income for contribution purposes = net profit &times; 92.35% (after the SE tax deduction). Your CPA can confirm the exact figure.</div>'
+      + '</div>';
+  }
+
+  else if (S.sec === 'goals') {
+    html = '<div class="panel"><div class="section-head"><h2>Goals &amp; add-on strategies</h2></div>'
+      + '<div class="grid2" style="margin-bottom:20px;">'
+      + '<div class="field"><label>Primary goal *</label>'
+      + '<select id="f_primaryGoal">'
+      + selOpt(c.primaryGoal, [['max-deduction','Maximize tax deduction now'],['simplicity','Keep it simple / low admin'],['flexibility','Maximum flexibility'],['large-shelter','Shelter large income'],['roth','Roth / tax-free growth']])
+      + '</select></div>'
+      + '<div class="field"><label>Investment risk tolerance</label>'
+      + '<select id="f_riskTolerance">'
+      + selOpt(c.riskTolerance, ['Conservative','Moderate-Conservative','Moderate','Moderate-Aggressive','Aggressive'])
+      + '</select></div>'
+      + '</div>'
+      + '<p style="font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:14px;">Add-on strategies of interest</p>'
+      + '<div class="grid2">'
+      + '<div class="check-card">'
+      + '<label class="check-row"><input type="checkbox" id="f_hsaInterest"' + (c.hsaInterest ? ' checked' : '') + '>'
+      + '<span><strong>HSA / Health Savings Account</strong><br><span style="font-size:12px;color:var(--ink-muted)">Triple tax advantage — requires HDHP enrollment</span></span></label>'
+      + '<div style="margin-top:10px;margin-left:22px;"><label style="font-size:12px;margin-bottom:4px;">Currently enrolled in HDHP?</label>'
+      + '<select id="f_hasHdhp" style="font-size:13px;">' + selOpt(c.hasHdhp, [['no','No'],['yes','Yes'],['considering','Considering switching']]) + '</select></div></div>'
+      + '<div class="check-card"><label class="check-row"><input type="checkbox" id="f_qbiInterest"' + (c.qbiInterest ? ' checked' : '') + '>'
+      + '<span><strong>QBI Deduction (Sec 199A)</strong><br><span style="font-size:12px;color:var(--ink-muted)">Deduct up to 20% of qualified business income for pass-throughs</span></span></label></div>'
+      + '<div class="check-card"><label class="check-row"><input type="checkbox" id="f_augustaInterest"' + (c.augustaInterest ? ' checked' : '') + '>'
+      + '<span><strong>Augusta Rule (Sec 280A)</strong><br><span style="font-size:12px;color:var(--ink-muted)">Rent your home to your business tax-free up to 14 days/yr</span></span></label></div>'
+      + '<div class="check-card"><label class="check-row"><input type="checkbox" id="f_annuityInterest"' + (c.annuityInterest ? ' checked' : '') + '>'
+      + '<span><strong>Annuity (supplemental deferral)</strong><br><span style="font-size:12px;color:var(--ink-muted)">No IRS cap — best after maxing qualified plans</span></span></label></div>'
+      + '</div></div>';
+  }
+
+  else if (S.sec === 'products') {
+    var selected = Array.isArray(c.selectedProducts) ? c.selectedProducts : [];
+    var carrierHtml = '';
+    Object.keys(CARRIERS).forEach(function(ckey) {
+      var car = CARRIERS[ckey];
+      var hasSelected = car.products.some(function(p){ return selected.indexOf(p.id) !== -1; });
+      carrierHtml += '<div class="carrier-card' + (hasSelected?' selected':'') + '">'
+        + '<div class="carrier-hdr"><div class="carrier-name">' + car.name + '</div>'
+        + '<span class="carrier-badge">' + car.badge + '</span></div>'
+        + '<p style="font-size:12px;color:var(--ink-muted);margin-bottom:10px;">' + car.desc + '</p>'
+        + '<ul class="prod-list">';
+      car.products.forEach(function(p) {
+        var isChk = selected.indexOf(p.id) !== -1;
+        var cc = CAT_COLORS[p.cat] || {bg:'#F0F0F0',color:'#333'};
+        carrierHtml += '<li>'
+          + '<input type="checkbox" class="prod-cb" data-pid="' + p.id + '"' + (isChk?' checked':'') + '>'
+          + '<div><span style="font-weight:600;">' + p.name + '</span>'
+          + ' <span style="display:inline-block;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:600;background:' + cc.bg + ';color:' + cc.color + ';">' + p.cat + '</span>'
+          + '<br><span style="font-size:12px;color:var(--ink-muted);">' + p.desc + '</span></div></li>';
+      });
+      carrierHtml += '</ul></div>';
+    });
+
+    var summaryHtml = '';
+    if (selected.length > 0) {
+      summaryHtml = '<div class="selected-products"><div class="sp-title">Selected products (' + selected.length + ')</div>';
+      Object.keys(CARRIERS).forEach(function(ckey) {
+        var car = CARRIERS[ckey];
+        car.products.forEach(function(p) {
+          if (selected.indexOf(p.id) !== -1) {
+            summaryHtml += '<div class="sp-item"><div><strong>' + p.name + '</strong><br>'
+              + '<span class="sp-carrier">' + car.name + '</span></div>'
+              + '<span style="font-size:11px;color:var(--ink-muted);">' + p.cat + '</span></div>';
+          }
+        });
+      });
+      summaryHtml += '</div>';
+    }
+
+    html = '<div class="panel"><div class="section-head"><h2>Insurance &amp; financial products</h2>'
+      + '<span style="font-size:12px;color:var(--ink-muted)">Check all products of interest to the client</span></div>'
+      + '<p style="font-size:13px;color:var(--ink-soft);margin-bottom:18px;">Select the insurance and financial products that fit this client&#39;s needs. Checked items will appear in the printed report and advisor notes.</p>'
+      + summaryHtml
+      + '<div class="carrier-grid">' + carrierHtml + '</div>'
+      + '</div>';
+  }
+
+  else if (S.sec === 'advisor') {
+    html = '<div class="panel"><div class="section-head"><h2>Advisor notes</h2></div>'
+      + '<div class="field"><label>CPA / advisor name and firm</label>'
+      + '<input type="text" id="f_advisorNotes" value="' + esc(c.advisorNotes) + '" placeholder="Jane Smith CPA — Smith &amp; Associates"></div>'
+      + '<div class="field"><label>Override plan recommendation</label>'
+      + '<select id="f_overridePlan">'
+      + selOpt(c.overridePlan, [['','Auto — use engine recommendation'],['solo401k','Solo 401(k) — override'],['sep','SEP-IRA — override'],['simple','SIMPLE IRA — override'],['db','Defined Benefit — override']])
+      + '</select><p class="help-text">Only override if your professional judgment differs. Document reasoning below.</p></div>'
+      + '<div class="field"><label>Strategy notes &amp; special considerations</label>'
+      + '<textarea id="f_strategyNotes" placeholder="S-Corp election plans, upcoming hires, spouse income, estate planning, prior rollovers, Sec 179 opportunities...">' + esc(c.strategyNotes) + '</textarea></div>'
+      + '<div class="info-box warn">This tool is for illustration purposes only and does not constitute tax, legal, or investment advice. All recommendations should be reviewed by the client\'s CPA before implementation.</div>'
+      + '</div>';
+  }
+
+  // Navigation buttons
+  html += '<div class="nav-btns no-print">';
+  if (idx > 0) html += '<button class="btn btn-ghost" id="btn-back">&#8592; Back</button>';
+  else         html += '<div></div>';
+  if (idx < SECS.length - 1) html += '<button class="btn" id="btn-next">Continue &#8594;</button>';
+  else                       html += '<button class="btn btn-gold" id="btn-next">Generate recommendation &#8594;</button>';
+  html += '</div>';
+
+  document.getElementById('sec-body').innerHTML = html;
+
+  // ── Bind all input fields via addEventListener (no inline handlers) ──
+  var fieldMap = {
+    f_clientName:'clientName', f_clientDob:'clientDob', f_clientEmail:'clientEmail',
+    f_clientPhone:'clientPhone', f_clientAddress:'clientAddress', f_bizName:'bizName',
+    f_bizStructure:'bizStructure', f_bizIndustry:'bizIndustry', f_bizEin:'bizEin',
+    f_bizYears:'bizYears', f_numEmployees:'numEmployees', f_fiscalYear:'fiscalYear',
+    f_netIncome:'netIncome', f_otherIncome:'otherIncome', f_filingStatus:'filingStatus',
+    f_taxBracket:'taxBracket', f_currentSavings:'currentSavings', f_retireAge:'retireAge',
+    f_existingAccounts:'existingAccounts', f_primaryGoal:'primaryGoal',
+    f_riskTolerance:'riskTolerance', f_hasHdhp:'hasHdhp', f_advisorNotes:'advisorNotes',
+    f_overridePlan:'overridePlan', f_strategyNotes:'strategyNotes',
+    // Section 1
+    f_monthlyGrossIncome:'monthlyGrossIncome', f_incSpouseIncome:'incSpouseIncome',
+    f_incOvertime:'incOvertime', f_incRental:'incRental', f_incSocSec:'incSocSec', f_incOther:'incOther',
+    // Section 2
+    f_dedFedTax:'dedFedTax', f_dedStateTax:'dedStateTax', f_dedFICA:'dedFICA',
+    f_ded401k:'ded401k', f_dedHealthIns:'dedHealthIns', f_dedLifeIns:'dedLifeIns', f_dedOtherPayroll:'dedOtherPayroll',
+    // Section 3
+    f_monthlyHousing:'monthlyHousing', f_fix2ndMortgage:'fix2ndMortgage',
+    f_monthlyCarPayment:'monthlyCarPayment', f_fixCar2:'fixCar2', f_fixCarIns:'fixCarIns',
+    f_fixHomeIns:'fixHomeIns', f_fixUtilities:'fixUtilities', f_fixCellPhone:'fixCellPhone',
+    f_fixInternet:'fixInternet', f_fixGroceries:'fixGroceries',
+    f_monthlyCreditCard:'monthlyCreditCard', f_fixPersonalLoan:'fixPersonalLoan',
+    f_monthlyStudentLoan:'monthlyStudentLoan', f_fixChildSupport:'fixChildSupport',
+    f_fixMedical:'fixMedical', f_monthlyChildcare:'monthlyChildcare', f_fixOther:'fixOther',
+    // Section 4
+    f_varDining:'varDining', f_varEntertainment:'varEntertainment', f_varStreaming:'varStreaming',
+    f_varClothing:'varClothing', f_varPersonalCare:'varPersonalCare', f_varGym:'varGym',
+    f_varTravel:'varTravel', f_varHobbies:'varHobbies', f_varGifts:'varGifts',
+    f_varPets:'varPets', f_monthlyOtherDebt:'monthlyOtherDebt',
+    // Section 5
+    f_savEmergency:'savEmergency', f_savLifeIns:'savLifeIns', f_savIUL:'savIUL',
+    f_savAnnuity:'savAnnuity', f_savMortProtect:'savMortProtect',
+    f_savHealthInd:'savHealthInd', f_savOtherSav:'savOtherSav',
+    // Mortgage protection
+    f_mpHomeValue:'mpHomeValue', f_mpMortgageBalance:'mpMortgageBalance',
+    f_mp2ndMortgage:'mp2ndMortgage', f_mpMonthlyPayment:'mpMonthlyPayment',
+    f_mpClientAge:'mpClientAge', f_mpCoborrowIncome:'mpCoborrowIncome'
+  };
+  Object.keys(fieldMap).forEach(function(id) {
+    var el = document.getElementById(id); if (!el) return;
+    var field = fieldMap[id];
+    var ev = (el.tagName === 'SELECT' || el.type === 'date') ? 'change' : 'input';
+    el.addEventListener(ev, function() { setF(field, el.value); });
+  });
+
+  // Checkboxes
+  var cbMap = {f_hsaInterest:'hsaInterest', f_qbiInterest:'qbiInterest', f_augustaInterest:'augustaInterest', f_annuityInterest:'annuityInterest'};
+  Object.keys(cbMap).forEach(function(id) {
+    var el = document.getElementById(id); if (!el) return;
+    el.addEventListener('change', function() { setF(cbMap[id], el.checked); });
+  });
+
+  // Product checkboxes
+  document.querySelectorAll('.prod-cb').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      var c2 = gc(); if (!c2) return;
+      var pid = cb.dataset.pid;
+      if (!Array.isArray(c2.selectedProducts)) c2.selectedProducts = [];
+      if (cb.checked) {
+        if (c2.selectedProducts.indexOf(pid) === -1) c2.selectedProducts.push(pid);
+      } else {
+        c2.selectedProducts = c2.selectedProducts.filter(function(p){ return p !== pid; });
+      }
+      saveData();
+      var ind = document.getElementById('save-ind');
+      if (ind) ind.textContent = 'Saved ' + new Date().toLocaleTimeString();
+      // Refresh carrier card selected state without full re-render
+      document.querySelectorAll('.carrier-card').forEach(function(card) {
+        var anyChecked = Array.from(card.querySelectorAll('.prod-cb')).some(function(x){ return x.checked; });
+        card.classList.toggle('selected', anyChecked);
+      });
+      // Refresh summary
+      var sumWrap = document.querySelector('.selected-products');
+      if (sumWrap) {
+        var sel2 = c2.selectedProducts;
+        if (sel2.length === 0) { sumWrap.style.display='none'; return; }
+        sumWrap.style.display='';
+        sumWrap.querySelector('.sp-title').textContent = 'Selected products (' + sel2.length + ')';
+      }
+    });
+  });
+
+  // Re-render household DTI live when any household field changes
+  if (S.sec === 'household') {
+    var hhFields = ['f_monthlyGrossIncome','f_incSpouseIncome','f_incOvertime','f_incRental','f_incSocSec','f_incOther',
+      'f_dedFedTax','f_dedStateTax','f_dedFICA','f_ded401k','f_dedHealthIns','f_dedLifeIns','f_dedOtherPayroll',
+      'f_monthlyHousing','f_fix2ndMortgage','f_monthlyCarPayment','f_fixCar2','f_fixCarIns','f_fixHomeIns',
+      'f_fixUtilities','f_fixCellPhone','f_fixInternet','f_fixGroceries','f_monthlyCreditCard','f_fixPersonalLoan',
+      'f_monthlyStudentLoan','f_fixChildSupport','f_fixMedical','f_monthlyChildcare','f_fixOther',
+      'f_varDining','f_varEntertainment','f_varStreaming','f_varClothing','f_varPersonalCare','f_varGym',
+      'f_varTravel','f_varHobbies','f_varGifts','f_varPets','f_monthlyOtherDebt',
+      'f_savEmergency','f_savLifeIns','f_savIUL','f_savAnnuity','f_savMortProtect','f_savHealthInd','f_savOtherSav',
+      'f_mpHomeValue','f_mpMortgageBalance','f_mp2ndMortgage','f_mpMonthlyPayment','f_mpClientAge','f_mpCoborrowIncome'];
+    hhFields.forEach(function(id) {
+      var el2 = document.getElementById(id); if (!el2) return;
+      el2.addEventListener('input', function() {
+        clearTimeout(el2._t);
+        el2._t = setTimeout(function() { renderSection(); }, 400);
+      });
+    });
+  }
+
+  // Radio buttons (age range)
+  document.querySelectorAll('input[name="ageRange"]').forEach(function(radio) {
+    radio.addEventListener('change', function() { setF('ageRange', this.value); });
+  });
+
+  // Nav buttons
+  var btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', function() { S.sec = SECS[idx - 1]; renderSection(); });
+  }
+  var btnNext = document.getElementById('btn-next');
+  if (btnNext) {
+    btnNext.addEventListener('click', function() {
+      if (idx < SECS.length - 1) { S.sec = SECS[idx + 1]; renderSection(); }
+      else { goToRec(); }
+    });
+  }
+}
+
+// ── GO TO RECOMMENDATION ─────────────────────────────────────
+function goToRec() {
+  var c = gc(); if (!c) return;
+  initStack(); S.view = 'recommendation'; render(); window.scrollTo(0,0);
+}
+
+
+// ── PRIORITY RECOMMENDATIONS ─────────────────────────────────
+function buildPriorityRecommendations(c, r) {
+  var income = parseFloat(c.netIncome) || 0;
+  var age    = c.ageRange || '';
+  var notes  = [];
+
+  if (income >= 250000) {
+    notes.push('Maximize pre-tax retirement contributions now — at your income level every dollar deferred saves ' + fmt(Math.round(income * 0.37 * 0.01)) + '+ in taxes per $100 contributed.');
+    notes.push('A Defined Benefit or Cash Balance plan paired with a Solo 401(k) can shelter $100,000-$340,000/yr — consider engaging an actuary this year.');
+  } else if (income >= 120000) {
+    notes.push('Prioritize maxing your ' + r.plan.name + ' before considering taxable investing — the tax savings compound significantly over time.');
+    notes.push('At ' + fmt(income) + '/yr income, an S-Corp election may reduce self-employment taxes by $5,000-$15,000/yr. Ask your CPA.');
+  } else if (income >= 50000) {
+    notes.push('Contribute what you can afford consistently — even $300-500/month invested in a ' + r.plan.name + ' builds significant wealth over 20+ years.');
+    notes.push('Focus on growing business income first. Each $10,000 income increase unlocks approximately ' + fmt(Math.round(10000 * 0.25)) + ' more in retirement contribution room.');
+  } else {
+    notes.push('At your current income level, even small consistent contributions matter. Start with what is comfortable — $100-200/month — and increase as income grows.');
+    notes.push('Your most powerful financial move right now may be growing business revenue rather than maximizing retirement contributions.');
+  }
+
+  if (age === 'under40') {
+    notes.push('Time is your biggest asset. Even modest contributions now outperform large contributions started at 50 due to compound growth.');
+  } else if (age === '40-49') {
+    notes.push('Peak earning decade — this is the time to aggressively close any retirement savings gap. Aim to increase contributions every year.');
+  } else if (age === '50-59') {
+    notes.push('IRS catch-up contributions add $7,500/yr to your Solo 401(k) limit. Use them — you have 10-15 years of compounding left before typical retirement.');
+  } else if (age === '60plus') {
+    notes.push('Shift focus toward capital preservation alongside growth. Review Social Security claiming strategy and Required Minimum Distribution planning with your advisor.');
+  }
+
+  return '<div style="background:var(--cream-2);border:1px solid var(--rule);border-left:4px solid var(--gold);padding:20px 24px;border-radius:4px;margin-bottom:24px;">'
+    + '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);font-weight:600;margin-bottom:8px;">Personalized guidance &mdash; ' + (c.ageRange === 'under40' ? 'Under 40' : c.ageRange === '40-49' ? 'Age 40-49' : c.ageRange === '50-59' ? 'Age 50-59' : 'Age 60+') + ' &middot; ' + fmt(income) + '/yr</div>'
+    + '<ul style="list-style:none;padding:0;margin:0;">'
+    + notes.map(function(n) {
+        return '<li style="padding:8px 0 8px 22px;border-bottom:1px solid var(--rule-soft);font-size:14px;color:var(--ink-soft);position:relative;">'
+          + '<span style="position:absolute;left:0;color:var(--gold);font-weight:700;">&#8594;</span>' + n + '</li>';
+      }).join('')
+    + '</ul></div>';
+}
+
+// ── RECOMMENDATION PAGE ──────────────────────────────────────
+function renderRecommendation() {
+  var c = gc(); if (!c) { goTo('dashboard'); return; }
+  var r      = calcRec(c);
+  var plan   = r.plan;
+  var bracket = parseFloat(c.taxBracket) / 100 || 0.24;
+  var income  = parseFloat(c.netIncome) || 0;
+
+  var curAge  = c.ageRange === 'under40' ? 35 : c.ageRange === '40-49' ? 44 : c.ageRange === '50-59' ? 54 : 62;
+  var retAge  = parseInt(c.retireAge) || 65;
+  var yrs     = Math.max(0, retAge - curAge);
+  var projBal = Math.round((parseFloat(c.currentSavings)||0) * Math.pow(1.07, yrs) + r.contrib * ((Math.pow(1.07, yrs) - 1) / 0.07));
+
+  var moTotal = stackTotal();
+  var yr = new Date().getFullYear();
+  var priorityHtml = buildPriorityRecommendations(c, r);
+
+  // DTI summary block
+  var mgi2  = parseFloat(c.monthlyGrossIncome)||0;
+  var dtiSummaryHtml = '';
+  if (mgi2 > 0) {
+    var mHsg2 = parseFloat(c.monthlyHousing)||0;
+    var mCar2 = parseFloat(c.monthlyCarPayment)||0;
+    var mStu2 = parseFloat(c.monthlyStudentLoan)||0;
+    var mCC2  = parseFloat(c.monthlyCreditCard)||0;
+    var mOth2 = parseFloat(c.monthlyOtherDebt)||0;
+    var mLiv2 = parseFloat(c.monthlyLiving)||0;
+    var mChi2 = parseFloat(c.monthlyChildcare)||0;
+    var totDebt2 = mHsg2+mCar2+mStu2+mCC2+mOth2;
+    var frontDTI2 = Math.round((mHsg2/mgi2)*100);
+    var backDTI2  = Math.round((totDebt2/mgi2)*100);
+    var disc2 = Math.round(mgi2 - totDebt2 - mLiv2 - mChi2);
+    var frontColor2 = frontDTI2<=28?'var(--sage)':frontDTI2<=36?'var(--gold)':'var(--coral)';
+    var backColor2  = backDTI2<=36?'var(--sage)':backDTI2<=43?'var(--gold)':'var(--coral)';
+    dtiSummaryHtml = '<div class="panel"><div class="section-head"><h2>Household budget &amp; debt analysis</h2></div>'
+      + '<div class="dti-meter">'
+      + '<div class="dti-card"><div class="dc-lbl">Front-end DTI (housing)</div>'
+      + '<div class="dc-val" style="color:' + frontColor2 + ';">' + frontDTI2 + '%</div>'
+      + '<div class="dti-bar-wrap"><div class="dti-bar ' + (frontDTI2<=28?'green':frontDTI2<=36?'yellow':'red') + '" style="width:' + Math.min(frontDTI2,100) + '%"></div></div>'
+      + '<div class="dc-sub">Target &lt;28% &mdash; ' + (frontDTI2<=28?'Healthy':frontDTI2<=36?'Moderate':'High') + '</div></div>'
+      + '<div class="dti-card"><div class="dc-lbl">Back-end DTI (all debt)</div>'
+      + '<div class="dc-val" style="color:' + backColor2 + ';">' + backDTI2 + '%</div>'
+      + '<div class="dti-bar-wrap"><div class="dti-bar ' + (backDTI2<=36?'green':backDTI2<=43?'yellow':'red') + '" style="width:' + Math.min(backDTI2,100) + '%"></div></div>'
+      + '<div class="dc-sub">Target &lt;36% &mdash; ' + (backDTI2<=36?'Healthy':backDTI2<=43?'Caution':'High Risk') + '</div></div>'
+      + '<div class="dti-card"><div class="dc-lbl">Monthly gross income</div>'
+      + '<div class="dc-val">$' + Math.round(mgi2).toLocaleString() + '</div>'
+      + '<div class="dc-sub">$' + Math.round(totDebt2).toLocaleString() + '/mo total debt payments</div></div>'
+      + '<div class="dti-card ' + (disc2>=0?'ok':'warn') + '"><div class="dc-lbl">Monthly discretionary</div>'
+      + '<div class="dc-val">$' + Math.max(0,disc2).toLocaleString() + '</div>'
+      + '<div class="dc-sub">' + (disc2<0?'Expenses exceed income':'After debt &amp; living costs') + '</div></div>'
+      + '</div>'
+      + (backDTI2>43?'<div class="info-box warn"><strong>High DTI:</strong> Back-end DTI of '+backDTI2+'% exceeds the 43% maximum used by most lenders. Recommend prioritizing debt payoff before increasing retirement contributions.</div>':'')
+      + '</div>';
+  }
+
+  var projRows = '';
+  for (var y = 0; y < 5; y++) {
+    var pInc = Math.round(income * Math.pow(1.05, y));
+    var pSE  = pInc * 0.9235;
+    var pC   = 0;
+    if      (r.planId === 'solo401k') pC = Math.min(23500 + Math.min(pSE * 0.25, 46500), 70000, pSE);
+    else if (r.planId === 'sep')      pC = Math.min(pSE * 0.25, 69000);
+    else if (r.planId === 'simple')   pC = Math.min(16500, pSE);
+    else                              pC = Math.min(pInc * 0.6, 340000, pSE);
+    projRows += '<tr>'
+      + '<td>' + (y === 0 ? 'Year 1 (current)' : 'Year ' + (y+1) + ' (' + (yr+y) + ')') + '</td>'
+      + '<td>' + fmt(pInc) + '</td>'
+      + '<td class="hl">' + fmt(Math.round(pC)) + '</td>'
+      + '<td class="hl">' + fmt(Math.round(pC * bracket)) + '</td>'
+      + '</tr>';
+  }
+
+  var cpaItems = [
+    ['Verify net SE income base for contribution calculation', 'Net SE income = net profit x 92.35%. This is the base for all plan limits.'],
+    ['Confirm plan type is optimal for current employee count', c.numEmployees !== '0' ? 'Client has ' + c.numEmployees + ' employees. Confirm plan obligations, match requirements, and cost.' : 'Solo owner confirmed. Revisit immediately if employees are hired.'],
+    ['Decide traditional vs. Roth contribution split', 'Roth builds tax-free income. Best when future tax rates are expected higher than today.'],
+    ['Adjust Q4 estimated tax payment for contributions', 'Contributions reduce taxable income — avoid overpaying estimates.'],
+    ['Confirm QBI deduction eligibility (Sec 199A)', c.qbiInterest ? 'Client interested. Confirm SSTB status and income threshold interaction.' : 'Review pass-through type and income level for eligibility.'],
+    ['Evaluate S-Corp election if not already in place', 'At net income above ~$80K, S-Corp election often reduces SE taxes and expands retirement options.'],
+    ['Establish plan before December 31', 'The plan document must be signed by Dec 31. This cannot be extended.'],
+    ['Fund employee elective deferral by December 31', 'Hard deadline — cannot be extended under any circumstances.'],
+    ['Fund employer profit-sharing by tax filing deadline', 'Can be as late as Oct 15 with a valid extension.'],
+    ['Review Form 5500-EZ filing requirement', 'Required for Solo 401(k) once plan assets exceed $250,000.'],
+    ['Schedule annual plan review and contribution recalculation', 'Reassess each fall as income changes.']
+  ];
+  if (c.augustaInterest) cpaItems.splice(9, 0, ['Document Augusta Rule rental agreement (Sec 280A)', 'Requires written agreement, fair market rate, and documented business purpose.']);
+  if (c.hsaInterest)     cpaItems.push(['Confirm HDHP enrollment and HSA contribution limits', '2025: $4,300 self / $8,550 family. Must be enrolled in HDHP before contributing.']);
+
+  // Products summary block for recommendation page
+  var selProds = Array.isArray(c.selectedProducts) ? c.selectedProducts : [];
+  var productSummaryHtml = '';
+  if (selProds.length > 0) {
+    var byCarrier = {};
+    Object.keys(CARRIERS).forEach(function(ckey) {
+      var car = CARRIERS[ckey];
+      car.products.forEach(function(p) {
+        if (selProds.indexOf(p.id) !== -1) {
+          if (!byCarrier[ckey]) byCarrier[ckey] = {name: car.name, prods: []};
+          byCarrier[ckey].prods.push(p);
+        }
+      });
+    });
+    productSummaryHtml = '<div class="panel"><div class="section-head"><h2>Recommended products</h2>'
+      + '<span style="font-size:12px;color:var(--ink-muted)">' + selProds.length + ' product' + (selProds.length!==1?'s':'') + ' selected</span></div>';
+    Object.keys(byCarrier).forEach(function(ckey) {
+      var entry = byCarrier[ckey];
+      productSummaryHtml += '<div style="margin-bottom:16px;">'
+        + '<div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:8px;">' + entry.name + '</div>'
+        + '<div class="plan-comps">';
+      entry.prods.forEach(function(p) {
+        var cc = CAT_COLORS[p.cat]||{bg:'#F0F0F0',color:'#333'};
+        productSummaryHtml += '<div class="plan-comp">'
+          + '<strong>' + p.name + '</strong>'
+          + ' <span style="display:inline-block;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600;background:'+cc.bg+';color:'+cc.color+';">' + p.cat + '</span>'
+          + '<br><span style="font-size:12px;color:var(--ink-muted);">' + p.desc + '</span></div>';
+      });
+      productSummaryHtml += '</div></div>';
+    });
+    productSummaryHtml += '</div>';
+  }
+
+  document.getElementById('main').innerHTML = ''
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;" class="no-print">'
+    + '<button class="btn btn-ghost btn-sm" onclick="S.view=\'intake\';render()">&#8592; Back to intake</button>'
+    + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+    + '<button class="btn btn-ghost btn-sm" onclick="printOnepager()">&#128196; Client one-pager</button>'
+    + '<button class="btn btn-ghost btn-sm" onclick="window.print()">&#128424; Print full report</button>'
+    + '</div></div>'
+
+    + '<div class="reco-hero">'
+    + '<div class="reco-eye">Retirement strategy recommendation</div>'
+    + '<h1>' + esc(plan.name) + '</h1>'
+    + '<p class="reco-sub">' + (esc(c.clientName)||'Client') + ' &nbsp;&middot;&nbsp; ' + (esc(c.bizStructure)||'') + (c.bizName ? ' &middot; '+esc(c.bizName) : '') + (income ? ' &middot; '+fmt(income)+'/yr net' : '') + ' &nbsp;&middot;&nbsp; ' + c.taxBracket + '% bracket</p>'
+    + '<div class="reco-sum">'
+    + '<div class="reco-sum-item"><div class="reco-sum-lbl">IRS max allowed</div><div class="reco-sum-val">' + fmt(r.contrib) + '/yr</div></div>'
+    + '<div class="reco-sum-item" style="background:rgba(184,134,11,0.18);border:1px solid rgba(218,165,32,0.4);"><div class="reco-sum-lbl" style="color:#DAA520;">Practical recommended</div><div class="reco-sum-val">' + fmt(r.recContrib) + '/yr</div></div>'
+    + '<div class="reco-sum-item"><div class="reco-sum-lbl">Est. tax savings</div><div class="reco-sum-val">' + fmt(r.recSavings) + '/yr</div></div>'
+    + '<div class="reco-sum-item"><div class="reco-sum-lbl">Projected balance</div><div class="reco-sum-val">' + fmt(projBal) + '</div></div>'
+    + '</div></div>'
+    + (r.lowIncomeWarning ? '<div style="background:#FFF4E6;border:1px solid #E8C9A0;border-left:4px solid #B85450;padding:16px 20px;border-radius:4px;margin-bottom:24px;font-size:14px;color:#8B4513;">'
+      + '<strong>&#9888; Affordability note:</strong> At ' + fmt(r.income) + '/yr net income, estimated taxes are approximately ' + fmt(r.estTotalTax) + '/yr, leaving roughly ' + fmt(r.afterTax) + '/yr take-home. After a minimum living expense cushion of ' + fmt(r.livingFloor) + '/yr, the practical maximum retirement contribution is approximately <strong>' + fmt(r.practicalContrib) + '/yr</strong>. '
+      + 'The IRS maximum (' + fmt(r.contrib) + '/yr) is what the law <em>permits</em> &mdash; not necessarily what is advisable. Discuss cash flow needs with your CPA before committing to the maximum.</div>' : '')
+
+    + priorityHtml
+    + dtiSummaryHtml
+    + '<div class="report-meta">'
+    + '<div class="rm-item"><div class="rm-lbl">Client</div><div class="rm-val">' + (esc(c.clientName)||'&mdash;') + '</div></div>'
+    + '<div class="rm-item"><div class="rm-lbl">Business</div><div class="rm-val">' + (esc(c.bizName)||'&mdash;') + ' (' + (esc(c.bizStructure)||'&mdash;') + ')</div></div>'
+    + '<div class="rm-item"><div class="rm-lbl">Net income</div><div class="rm-val">' + (income ? fmt(income)+'/yr' : '&mdash;') + '</div></div>'
+    + '<div class="rm-item"><div class="rm-lbl">Report date</div><div class="rm-val">' + new Date().toLocaleDateString() + '</div></div>'
+    + '</div>'
+
+    + '<div class="panel"><div class="section-head"><h2>Why this plan</h2><span class="badge badge-' + r.planId + '">' + plan.tag + '</span></div>'
+    + '<ul class="reason-list">' + r.reasoning.map(function(x){
+        if (x.indexOf('AFFORDABILITY NOTE:') === 0) {
+          return '<li style="background:#FFF4E6;border-left:3px solid #B85450;padding:12px 12px 12px 32px;border-radius:0 4px 4px 0;color:#8B4513;">'
+            + '<strong style="color:#B85450;">&#9888; Affordability note:</strong> '
+            + esc(x.replace('AFFORDABILITY NOTE: ','')) + '</li>';
+        }
+        return '<li>' + esc(x) + '</li>';
+      }).join('') + '</ul></div>'
+
+    + '<div class="panel"><div class="section-head"><h2>Plan components</h2></div>'
+    + '<p style="font-size:14px;color:var(--ink-soft);margin-bottom:16px;">' + esc(plan.desc) + '</p>'
+    + '<div class="plan-comps">' + plan.comps.map(function(x){ return '<div class="plan-comp">' + esc(x) + '</div>'; }).join('') + '</div></div>'
+
+    + '<div class="panel"><div class="section-head"><h2>5-year contribution projection</h2></div>'
+    + '<table class="proj-tbl"><thead><tr><th>Period</th><th>Projected income</th><th>Max contribution</th><th>Est. tax savings</th></tr></thead>'
+    + '<tbody>' + projRows + '</tbody></table>'
+    + '<p style="font-size:12px;color:var(--ink-muted);margin-top:10px;">Assumes 5% annual income growth. Projected balance assumes 7% return. Actual results will vary.</p></div>'
+
+    + '<div class="panel"><div class="section-head"><h2>Monthly cost stack</h2>'
+    + '<button class="btn btn-ghost btn-sm no-print" onclick="resetStack()">Reset to defaults</button></div>'
+    + '<div class="cstack">'
+    + '<div class="csr hdr"><div>Component</div><div style="text-align:right">Monthly</div><div style="text-align:right">Annual</div><div></div></div>'
+    + '<div id="stack-rows"></div>'
+    + '<div class="csr tot"><div>Total annual commitment</div><div id="cs-mo" style="text-align:right">...</div><div class="ann" id="cs-ann">...</div><div></div></div>'
+    + '</div>'
+    + '<div class="cs-add no-print"><button onclick="addRow()">+ Add line item</button></div>'
+    + '<div class="sav-grid">'
+    + '<div class="sav-card"><div class="sc-lbl">Est. tax savings (recommended)</div><div class="sc-val">' + fmt(r.recSavings) + '</div><div class="sc-sub">Based on ' + fmt(r.recContrib) + '/yr practical contribution</div></div>'
+    + '<div class="sav-card"><div class="sc-lbl">Monthly outlay</div><div class="sc-val" id="sav-mo">' + fmtMo(moTotal) + '</div><div class="sc-sub">Total monthly contributions (cost stack)</div></div>'
+    + '<div class="sav-card"><div class="sc-lbl">Net cost after tax benefit</div><div class="sc-val" id="sav-net">' + fmt(Math.max(0, moTotal*12 - r.recSavings)) + '</div><div class="sc-sub">Annual outlay minus estimated tax savings</div></div>'
+    + '</div></div>'
+
+    + '<div class="panel"><div class="section-head"><h2>CPA discussion checklist</h2></div>'
+    + '<ul style="list-style:none;padding:0;">'
+    + cpaItems.map(function(item){
+        return '<li style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule-soft);font-size:14px;">'
+          + '<input type="checkbox" style="width:auto;flex-shrink:0;margin-top:3px;accent-color:var(--sage);">'
+          + '<div><strong>' + esc(item[0]) + '</strong><br>'
+          + '<span style="font-size:12px;color:var(--ink-muted);">' + esc(item[1]) + '</span></div></li>';
+      }).join('')
+    + '</ul></div>'
+
+    + productSummaryHtml
+    + '<div class="disc"><h4>Important disclosures</h4>'
+    + '<p>This analysis is for illustration purposes only and does not constitute tax, legal, or investment advice. Consult a licensed CPA before implementing any strategy.</p>'
+    + '<p>Contribution limits reflect 2025 IRS guidance and are subject to annual cost-of-living adjustments.</p>'
+    + '<p>Solo 401(k) must be established by December 31 of the tax year. Employee deferrals due Dec 31; employer contributions up to Oct 15 with extension.</p>'
+    + '<p>Defined Benefit contributions are determined by a qualified actuary annually and are not guaranteed. Once established, the plan is difficult to terminate without penalties.</p>'
+    + '<p>Tax savings estimates use stated marginal bracket and do not account for state taxes, AMT, or phase-outs. Actual savings will differ.</p>'
+    + '<p>Projected balance assumes 7% annual return and consistent contributions. Past performance does not guarantee future results.</p>'
+    + '</div>'
+    + '<div id="sig-wrap"></div>';
+
+  renderStackRows();
+  renderSigs(c);
+}
+
+// ── COST STACK INTERACTIONS ───────────────────────────────────
+function renderStackRows() {
+  var c = gc(); if (!c) return;
+  var el = document.getElementById('stack-rows'); if (!el) return;
+  el.innerHTML = (c.costStack || []).map(function(row, i) {
+    return '<div class="csr">'
+      + '<input class="lbl-i" type="text" value="' + esc(row.label) + '" data-idx="' + i + '" data-field="label">'
+      + '<input type="number" value="' + (row.monthly||0) + '" min="0" data-idx="' + i + '" data-field="monthly" style="text-align:right">'
+      + '<div class="ann" id="csr-ann-' + i + '">' + fmt((parseFloat(row.monthly)||0)*12) + '/yr</div>'
+      + '<button data-idx="' + i + '" class="del-row-btn" style="background:none;border:none;color:var(--coral);cursor:pointer;font-size:20px;line-height:1;padding:0;">&#215;</button>'
+      + '</div>';
+  }).join('');
+  refreshTotals();
+
+  // Bind row events
+  el.querySelectorAll('input[data-field]').forEach(function(inp) {
+    var ev = inp.dataset.field === 'monthly' ? 'input' : 'input';
+    inp.addEventListener(ev, function() {
+      var i     = parseInt(inp.dataset.idx);
+      var field = inp.dataset.field;
+      var c2    = gc(); if (!c2) return;
+      c2.costStack[i][field] = field === 'monthly' ? (parseFloat(inp.value)||0) : inp.value;
+      saveData();
+      if (field === 'monthly') {
+        var ann = document.getElementById('csr-ann-' + i);
+        if (ann) ann.textContent = fmt((parseFloat(inp.value)||0)*12) + '/yr';
+        refreshTotals();
+      }
+    });
+  });
+  el.querySelectorAll('.del-row-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var i = parseInt(btn.dataset.idx);
+      var c2 = gc(); if (!c2) return;
+      c2.costStack.splice(i, 1); saveData(); renderStackRows();
+    });
+  });
+}
+
+function addRow() {
+  var c = gc(); if (!c) return;
+  c.costStack.push({id:'r'+Date.now(), label:'Custom item', monthly:0});
+  saveData(); renderStackRows();
+}
+
+function resetStack() {
+  var c = gc(); if (!c) return;
+  var r = calcRec(c);
+  c.costStack = defaultStack(r.planId, c.netIncome);
+  saveData(); renderStackRows();
+}
+
+function refreshTotals() {
+  var c = gc(); if (!c) return;
+  var mo = stackTotal();
+  var el;
+  el = document.getElementById('cs-mo');  if (el) el.textContent = fmtMo(mo);
+  el = document.getElementById('cs-ann'); if (el) el.textContent = fmt(mo*12) + '/yr';
+  el = document.getElementById('sav-mo'); if (el) el.textContent = fmtMo(mo);
+  var r = calcRec(c);
+  el = document.getElementById('sav-net'); if (el) el.textContent = fmt(Math.max(0, mo*12 - r.recSavings));
+}
+
+// ── SIGNATURES ────────────────────────────────────────────────
+var _drawing = {}, _ctx = {};
+
+function renderSigs(c) {
+  var wrap = document.getElementById('sig-wrap'); if (!wrap) return;
+  var dateStr = c.signedAt ? 'Signed ' + new Date(c.signedAt).toLocaleDateString() : '';
+  var html = '<div class="panel"><div class="section-head"><h2>Signatures</h2></div>';
+
+  var signers = [
+    {key:'signatureClient',  label:'Client',  name: c.clientName || 'Client'},
+    {key:'signatureAdvisor', label:'Advisor', name: S.branding.agentName || 'Advisor'}
+  ];
+
+  signers.forEach(function(sig) {
+    if (c[sig.key]) {
+      html += '<div class="sig-section"><h3>' + sig.label + ' &mdash; ' + esc(sig.name) + '</h3>'
+        + '<div class="sig-img"><img src="' + c[sig.key] + '" alt="Signature"></div>'
+        + '<div class="sig-acts no-print">'
+        + '<button class="btn btn-ghost btn-sm" data-clearkey="' + sig.key + '">Clear &amp; re-sign</button>'
+        + (dateStr ? '<span class="sig-saved">' + dateStr + '</span>' : '')
+        + '</div></div>';
+    } else {
+      html += '<div class="sig-section"><h3>' + sig.label + ' signature &mdash; ' + esc(sig.name) + '</h3>'
+        + '<p class="sig-help">Sign with mouse or finger. Click Save when done.</p>'
+        + '<div class="sig-wrap"><canvas class="sig-canvas" id="sc-' + sig.key + '"></canvas>'
+        + '<div class="sig-ph" id="sp-' + sig.key + '">Sign here</div></div>'
+        + '<div class="sig-acts no-print">'
+        + '<button class="btn btn-sm" data-savekey="' + sig.key + '">Save signature</button>'
+        + '<button class="btn btn-ghost btn-sm" data-clearcanvas="' + sig.key + '">Clear</button>'
+        + '</div></div>';
+    }
+  });
+
+  html += '</div>';
+  wrap.innerHTML = html;
+
+  // Bind sig buttons
+  wrap.querySelectorAll('[data-clearkey]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var c2 = gc(); if (!c2) return;
+      c2[btn.dataset.clearkey] = ''; saveData(); renderSigs(c2);
+    });
+  });
+  wrap.querySelectorAll('[data-savekey]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.dataset.savekey;
+      var canvas = document.getElementById('sc-' + key); if (!canvas) return;
+      var c2 = gc(); if (!c2) return;
+      c2[key] = canvas.toDataURL('image/png'); c2.signedAt = new Date().toISOString();
+      saveData(); toast('Signature saved'); renderSigs(c2);
+    });
+  });
+  wrap.querySelectorAll('[data-clearcanvas]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.dataset.clearcanvas;
+      var canvas = document.getElementById('sc-' + key); if (!canvas) return;
+      if (_ctx[key]) _ctx[key].clearRect(0, 0, canvas.width, canvas.height);
+      var ph = document.getElementById('sp-' + key); if (ph) ph.classList.remove('hidden');
+    });
+  });
+
+  // Init pads
+  setTimeout(function() {
+    var c2 = gc(); if (!c2) return;
+    if (!c2.signatureClient)  initPad('signatureClient');
+    if (!c2.signatureAdvisor) initPad('signatureAdvisor');
+  }, 100);
+}
+
+function initPad(key) {
+  var canvas = document.getElementById('sc-' + key); if (!canvas) return;
+  canvas.width  = canvas.offsetWidth || 640;
+  canvas.height = 120;
+  var ctx = canvas.getContext('2d');
+  _ctx[key] = ctx; _drawing[key] = false;
+  ctx.strokeStyle = '#1A1A1A'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  var ph = document.getElementById('sp-' + key);
+
+  function pos(e) {
+    var rect = canvas.getBoundingClientRect();
+    var src  = e.touches ? e.touches[0] : e;
+    return {
+      x: (src.clientX - rect.left) * (canvas.width / rect.width),
+      y: (src.clientY - rect.top)  * (canvas.height / rect.height)
+    };
+  }
+  canvas.onmousedown  = function(e) { _drawing[key]=true; var p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); if(ph) ph.classList.add('hidden'); };
+  canvas.onmousemove  = function(e) { if(!_drawing[key]) return; var p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); };
+  canvas.onmouseup    = function()  { _drawing[key]=false; };
+  canvas.onmouseleave = function()  { _drawing[key]=false; };
+  canvas.addEventListener('touchstart',  function(e){ e.preventDefault(); _drawing[key]=true; var p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); if(ph) ph.classList.add('hidden'); }, {passive:false});
+  canvas.addEventListener('touchmove',   function(e){ e.preventDefault(); if(!_drawing[key]) return; var p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },                                {passive:false});
+  canvas.addEventListener('touchend',    function()  { _drawing[key]=false; },                                                                                                           {passive:false});
+}
+
+// ── ONE-PAGER ─────────────────────────────────────────────────
+function printOnepager() {
+  var c = gc(); if (!c) return;
+  var r    = calcRec(c);
+  var plan = r.plan;
+  var mo   = stackTotal();
+  var today = new Date().toLocaleDateString();
+  var prev = document.getElementById('main').innerHTML;
+
+  document.getElementById('main').innerHTML = ''
+    + '<div class="onepager">'
+    + '<div class="op-hdr">'
+    + '<div><div class="op-logo">Retirement Strategy<span>Personalized plan summary</span></div>'
+    + '<p style="margin-top:8px;font-size:13px;color:var(--ink-soft);">Prepared for: <strong>' + (esc(c.clientName)||'Client') + '</strong> &nbsp;&middot;&nbsp; ' + today + '</p></div>'
+    + '<div style="text-align:right;font-size:12px;color:var(--ink-muted);line-height:1.9;">'
+    + (S.branding.agentName  ? '<div>' + esc(S.branding.agentName)  + '</div>' : '')
+    + (S.branding.agencyName ? '<div>' + esc(S.branding.agencyName) + '</div>' : '')
+    + (S.branding.agentPhone ? '<div>' + esc(S.branding.agentPhone) + '</div>' : '')
+    + (S.branding.agentEmail ? '<div>' + esc(S.branding.agentEmail) + '</div>' : '')
+    + '</div></div>'
+    + '<div class="op-cost">'
+    + '<div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:6px;">Recommended plan</div>'
+    + '<h2 style="color:white;font-family:Georgia,serif;margin-bottom:0;">' + esc(plan.name) + '</h2>'
+    + '<div class="op-grid">'
+    + '<div class="op-ci"><div class="oc-lbl">Max contribution</div><div class="oc-val">' + fmt(r.contrib) + '/yr</div></div>'
+    + '<div class="op-ci"><div class="oc-lbl">Est. tax savings</div><div class="oc-val">' + fmt(r.taxSavings) + '/yr</div></div>'
+    + '<div class="op-ci"><div class="oc-lbl">Monthly outlay</div><div class="oc-val">' + fmtMo(mo) + '</div></div>'
+    + '</div></div>'
+    + '<h3 style="margin:20px 0 10px;">What this plan includes</h3>'
+    + '<ul style="padding-left:20px;font-size:14px;line-height:1.9;color:var(--ink-soft);">'
+    + plan.comps.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
+    + '<h3 style="margin:20px 0 10px;">Why this plan for you</h3>'
+    + '<ul style="padding-left:20px;font-size:14px;line-height:1.9;color:var(--ink-soft);">'
+    + r.reasoning.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
+    + (selProds.length > 0 ? ('<h3 style="margin:20px 0 10px;">Recommended products</h3>'
+      + '<ul style="padding-left:20px;font-size:14px;line-height:1.9;color:var(--ink-soft);">'
+      + (function() {
+          var items = '';
+          Object.keys(CARRIERS).forEach(function(ckey) {
+            var car = CARRIERS[ckey];
+            car.products.forEach(function(p) {
+              if (selProds.indexOf(p.id) !== -1) items += '<li><strong>' + p.name + '</strong> &mdash; ' + car.name + '</li>';
+            });
+          });
+          return items;
+        })()
+      + '</ul>') : '')
+    + '<h3 style="margin:20px 0 10px;">Your action steps</h3>'
+    + '<ol style="padding-left:20px;font-size:14px;line-height:2;color:var(--ink-soft);">'
+    + '<li>Get your EIN at IRS.gov (free, instant online)</li>'
+    + '<li>Open your <strong>' + esc(plan.name) + '</strong> at Fidelity, Schwab, or Vanguard &mdash; <strong>before December 31</strong></li>'
+    + '<li>Sign the plan adoption agreement to legally establish the plan</li>'
+    + '<li>Calculate your exact contribution amount with your CPA before year-end</li>'
+    + '<li>Fund employee elective deferral by <strong>December 31</strong> &mdash; hard, non-extendable deadline</li>'
+    + '<li>Fund employer profit-sharing by tax filing deadline (October 15 with extension)</li>'
+    + '<li>Invest contributions &mdash; do not leave in cash</li>'
+    + '<li>Schedule an annual review each fall to recalculate optimal contribution</li>'
+    + '</ol>'
+    + '<div style="margin-top:32px;padding-top:14px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-muted);font-style:italic;">'
+    + 'For illustration purposes only. Not tax or legal advice. Consult your CPA before implementing. Limits reflect 2025 IRS guidance.</div>'
+    + '<div style="margin-top:44px;display:grid;grid-template-columns:2fr 1fr;gap:40px;">'
+    + '<div><div style="border-bottom:1px solid var(--ink);height:44px;"></div>'
+    + '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-muted);margin-top:4px;">Client signature &nbsp;&middot;&nbsp; ' + (esc(c.clientName)||'Client') + '</div></div>'
+    + '<div><div style="border-bottom:1px solid var(--ink);height:44px;"></div>'
+    + '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-muted);margin-top:4px;">Date</div></div>'
+    + '</div></div>';
+
+  document.body.classList.add('op-mode');
+  window.print();
+  document.body.classList.remove('op-mode');
+  document.getElementById('main').innerHTML = prev;
+  renderStackRows();
+}
+
+// ── PLAN COMPARISON ──────────────────────────────────────────
+function renderComparison() {
+  var rows = [
+    ['Max contribution 2025','$70,000','$69,000','$16,500','Up to $340,000'],
+    ['Catch-up age 50-59','+$7,500','None','+$3,500','Auto-increased'],
+    ['Catch-up age 60-63','+$11,250','None','+$3,500','Auto-increased'],
+    ['Eligible structures','Sole, LLC, S-Corp','Any','100 or fewer employees','Any with actuary'],
+    ['Employees allowed?','Owner only','Yes — same % for all','Yes — match required','Yes but complex'],
+    ['Roth option?','Yes','No','No','No'],
+    ['Plan loans?','Yes','No','No','No'],
+    ['Annual IRS filing','Form 5500-EZ >$250K','None required','None required','Form 5500 annually'],
+    ['Actuary required?','No','No','No','Yes (~$2-5K/yr)'],
+    ['Admin complexity','Low-Medium','Very Low','Low','High'],
+    ['Contribution deadline','Dec 31 (deferral) / Oct 15 (ER)','Oct 15 w/ extension','Dec 31 deferrals','Oct 15 w/ extension'],
+    ['Best for','Solo owners, max deferral','Simplicity and flexibility','Small teams','High earners 50+'],
+  ];
+  document.getElementById('main').innerHTML = ''
+    + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:10px;">'
+    + '<div><div style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);font-weight:600;">Reference</div>'
+    + '<h1>Plan comparison</h1>'
+    + '<p style="color:var(--ink-soft);margin-top:6px;">Side-by-side guide for business owner retirement strategies. 2025 IRS limits.</p></div>'
+    + '<button class="btn btn-ghost btn-sm no-print" onclick="window.print()">&#128424; Print</button></div>'
+    + '<div class="panel"><div style="overflow-x:auto;">'
+    + '<table class="cmp-tbl"><thead><tr>'
+    + '<th style="text-align:left;min-width:180px;">Feature</th>'
+    + '<th class="hl-col">Solo 401(k)</th><th>SEP-IRA</th><th>SIMPLE IRA</th><th>Defined Benefit</th>'
+    + '</tr></thead><tbody>'
+    + rows.map(function(row){
+        return '<tr><td>' + esc(row[0]) + '</td>'
+          + '<td class="rec">' + esc(row[1]) + '</td>'
+          + '<td>' + esc(row[2]) + '</td><td>' + esc(row[3]) + '</td><td>' + esc(row[4]) + '</td></tr>';
+      }).join('')
+    + '</tbody></table></div></div>'
+    + '<div class="disc"><h4>Disclosures</h4>'
+    + '<p>Limits reflect 2025 IRS guidance and are subject to annual cost-of-living adjustments.</p>'
+    + '<p>Solo 401(k) is unavailable if you have full-time W-2 employees other than a spouse.</p>'
+    + '<p>SEP-IRA contribution percentages must be uniform across all eligible employees.</p>'
+    + '<p>SIMPLE IRA cannot be combined with any other employer retirement plan in the same calendar year.</p>'
+    + '<p>Defined Benefit contributions are mandatory annually once the plan is established. Early termination can trigger significant penalties.</p>'
+    + '</div>';
+}
+
+// ── HELP ─────────────────────────────────────────────────────
+function renderHelp() {
+  document.getElementById('main').innerHTML = ''
+    + '<div style="margin-bottom:24px;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);font-weight:600;">Help</div><h1>Using this tool</h1></div>'
+    + '<div class="panel"><h2>Quick start</h2><ol style="padding-left:22px;margin-top:12px;line-height:2.2;font-size:14px;">'
+    + '<li><strong>Dashboard</strong> — shows all client records. Click "+ New client intake" to begin.</li>'
+    + '<li><strong>Intake form</strong> — 5 sections. All fields save automatically as you type or change a value.</li>'
+    + '<li><strong>Generate recommendation</strong> — click the gold button when intake is complete.</li>'
+    + '<li><strong>Cost stack</strong> — pre-populated with 2025 estimates. Edit any line or add custom rows.</li>'
+    + '<li><strong>Print full report</strong> — complete printable PDF including recommendation, CPA checklist, and signatures.</li>'
+    + '<li><strong>Client one-pager</strong> — clean plain-language summary with signature line for client acknowledgment.</li>'
+    + '</ol></div>'
+    + '<div class="panel"><h2>How the recommendation engine works</h2><ul style="padding-left:22px;margin-top:12px;line-height:2.2;font-size:14px;">'
+    + '<li><strong>Defined Benefit</strong> — income &ge; $200K AND age 50+. Highest possible annual shelter.</li>'
+    + '<li><strong>Solo 401(k)</strong> — 0 employees AND non-C-Corp. Default for most self-employed owners.</li>'
+    + '<li><strong>SIMPLE IRA</strong> — 1 to 5 employees. Best small-team option.</li>'
+    + '<li><strong>SEP-IRA</strong> — all other cases, or when simplicity is the stated goal.</li>'
+    + '<li>Use the Override field in Advisor notes to manually select a different plan.</li>'
+    + '</ul></div>'
+    + '<div class="panel"><h2>Digital signatures</h2>'
+    + '<p style="font-size:14px;color:var(--ink-soft);line-height:1.7;">On the recommendation page, signature pads appear for both client and advisor. Sign with a mouse on desktop or finger on tablet. Click <strong>Save signature</strong> to embed in the record — appears on all printed reports. Use <strong>Clear &amp; re-sign</strong> to redo.</p></div>'
+    + '<div class="panel"><h2>Branding</h2>'
+    + '<p style="font-size:14px;color:var(--ink-soft);line-height:1.7;">Click the bracketed fields in the footer to enter your name, firm, phone, and email. These appear on all printed reports and one-pagers.</p></div>'
+    + '<div class="panel"><h2>Data and privacy</h2>'
+    + '<p style="font-size:14px;color:var(--ink-soft);line-height:1.7;">All data is stored in this browser only using localStorage. Nothing is transmitted anywhere. Use <strong>Export backup</strong> to download a JSON file. Use <strong>Import backup</strong> to restore on a new device.</p></div>'
+    + '<div class="panel"><h2>2025 key numbers</h2><div class="grid2">'
+    + '<div><h3 style="margin-bottom:10px;">Contribution limits</h3><ul style="padding-left:18px;font-size:14px;line-height:2;">'
+    + '<li>Solo 401(k) total: $70,000</li><li>Catch-up 50-59: +$7,500</li><li>Catch-up 60-63: +$11,250</li>'
+    + '<li>SEP-IRA: $69,000</li><li>SIMPLE deferral: $16,500</li><li>SIMPLE catch-up: +$3,500</li><li>Defined Benefit: up to $340,000</li></ul></div>'
+    + '<div><h3 style="margin-bottom:10px;">HSA limits (2025)</h3><ul style="padding-left:18px;font-size:14px;line-height:2;">'
+    + '<li>Self-only: $4,300</li><li>Family: $8,550</li><li>HDHP min deductible (self): $1,650</li>'
+    + '<li>HDHP min deductible (family): $3,300</li><li>OOP max (self): $8,300</li><li>OOP max (family): $16,600</li>'
+    + '<li>SE income factor: net profit x 92.35%</li></ul></div>'
+    + '</div></div>';
+    + '<div class="panel"><h2>Insurance carriers</h2>'
+    + '<p style="font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px;">The Products section of the intake form lets you select specific products from each carrier for the client. Selected products appear on the recommendation page and printed reports.</p>'
+    + '<ul style="padding-left:20px;font-size:14px;line-height:2;">'
+    + '<li><strong>Aflac</strong> &mdash; Accident, Cancer/Critical Illness, Short-Term Disability, Hospital Indemnity, Dental/Vision, Life</li>'
+    + '<li><strong>American Amicable</strong> &mdash; Term Life, Whole Life, Final Expense, Children&apos;s Whole Life</li>'
+    + '<li><strong>Mutual of Omaha</strong> &mdash; Term Life, Whole/Universal Life, Medicare Supplement, Long-Term Care, Fixed Annuity, Disability Income</li>'
+    + '<li><strong>Transamerica</strong> &mdash; Term/UL/IUL/Whole Life, Fixed/Indexed Annuities, IRA, Roth IRA, SEP-IRA, 403(b), Long-Term Care</li>'
+    + '<li><strong>Americo</strong> &mdash; Term/Whole/Final Expense Life, Fixed/Indexed Annuities, Medicare Supplement, Cancer/Critical Illness</li>'
+    + '</ul></div>';
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────
+function render() {
+  document.querySelectorAll('nav.tabs button').forEach(function(b){ b.classList.remove('active'); });
+  var navMap = {dashboard:'nav-dashboard', intake:'nav-dashboard', recommendation:'nav-dashboard', comparison:'nav-comparison', help:'nav-help'};
+  var nb = document.getElementById(navMap[S.view] || 'nav-dashboard');
+  if (nb) nb.classList.add('active');
+
+  switch (S.view) {
+    case 'dashboard':      renderDashboard();      break;
+    case 'intake':         renderIntake();         break;
+    case 'recommendation': renderRecommendation(); break;
+    case 'comparison':     renderComparison();     break;
+    case 'help':           renderHelp();           break;
+    default:               renderDashboard();
+  }
+  bindBranding();
+}
+
+loadData();
+render();
+
+</script>
+</body>
+</html>
